@@ -53,9 +53,16 @@ const _populateForest = {
             // 4. Set random rotation (around the Y axis)
             tree.rotation.y = Math.random() * Math.PI * 2;
 
-            // 5. Set random scale
-            const scale = 0.8 + Math.random() * 0.4; // Scale from 0.8 to 1.2
-            tree.scale.set(scale, scale, scale);
+            // 5. Set random non-uniform scale for more natural-looking trees
+            const baseScale = 0.7 + Math.random() * 0.8; // Base scale from 0.7 to 1.5
+            const heightVariation = 0.8 + Math.random() * 0.4; // Taller or shorter trees (80% to 120% of base)
+            const widthVariation = 0.9 + Math.random() * 0.2;  // Wider or narrower trees (90% to 110% of base)
+
+            const scaleX = baseScale * widthVariation;
+            const scaleY = baseScale * heightVariation;
+            const scaleZ = baseScale * widthVariation; // Keep X and Z proportional to maintain aspect ratio
+
+            tree.scale.set(scaleX, scaleY, scaleZ);
 
             // 6. Ensure shadows are enabled for all meshes in the cloned object
             tree.traverse((child) => {
