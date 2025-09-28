@@ -64,15 +64,16 @@ let game = {
         )
         _score.init()
         _scene.init()
+        _move.init(_scene)
+        _cibles.init(_scene)
 
         if (config.environment === 'forest') {
-            _populateForest.init(_scene.scene);
+            const targets = [_cibles.cible.position];
+            _populateForest.init(_scene.scene, targets);
         } else {
             _populateNature.init(_scene.scene);
         }
 
-        _move.init(_scene)
-        _cibles.init(_scene)
         _arrows.init(_scene,_cibles,_score,this.gravity,this.Font)
 
         this.stats.dom.style.top = 'initial'
@@ -81,7 +82,6 @@ let game = {
 
         _createStars(_scene.scene, 2000, 800);
         this.createClouds = new _createClouds(_scene.scene, _scene.camera);
-        // _createClouds.init(_scene.scene, _scene.camera);
 
 
                         const discGeometry = new THREE.BoxGeometry(1,1,1);
