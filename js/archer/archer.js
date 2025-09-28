@@ -180,6 +180,14 @@ let game = {
         requestAnimationFrame(game.animate);
         _move.updatePlayerMovement();
         _move.updateCameraRotation();
+
+        // Update wind for arrows
+        if (game.createClouds) {
+            const windDirection = game.createClouds.getWindDirection();
+            const windSpeed = game.createClouds.getWindSpeed();
+            _arrows.wind.copy(windDirection).multiplyScalar(windSpeed); // Multiplier to make the wind noticeable
+        }
+
         _arrows.checkArrows();
         _scene.renderer.render(_scene.scene, _scene.camera);
         game.stats.update();
