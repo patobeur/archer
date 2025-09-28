@@ -99,13 +99,39 @@ const _arrows = {
 		this._score = _score;
 		this._scene = _scene;
 		this.gravity = gravity;
-		document.addEventListener("click", _arrows.shootArrow);
-		document.addEventListener("touchstart", (event) => {
-			// Déclencher le tir uniquement si le toucher a lieu sur la moitié droite de l'écran
-			if (event.touches[0].clientX > window.innerWidth / 2) {
-				_arrows.shootArrow();
-			}
+
+		const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+		if (isTouchDevice) {
+			this.createShootButton();
+		} else {
+			document.addEventListener("click", _arrows.shootArrow);
+		}
+	},
+
+	createShootButton: function () {
+		const button = document.createElement("button");
+		button.textContent = "Shoot";
+		Object.assign(button.style, {
+			position: "absolute",
+			bottom: "20px",
+			right: "20px",
+			width: "80px",
+			height: "80px",
+			borderRadius: "50%",
+			background: "rgba(255, 0, 0, 0.7)",
+			color: "white",
+			fontSize: "18px",
+			border: "none",
+			zIndex: "100",
 		});
+
+		button.addEventListener("touchstart", (event) => {
+			event.preventDefault(); // Empêche le zoom ou autres actions par défaut
+			_arrows.shootArrow();
+		});
+
+		document.body.appendChild(button);
 	},
 
 	addCible: function (cibleMesh) {

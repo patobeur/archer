@@ -1,144 +1,188 @@
 import * as THREE from "three";
+
 const _move = {
-	moveSpeed: 0.1, // Vitesse de déplacement
+	moveSpeed: 0.1,
+	lookSpeed: 0.003,
 	keys: { z: false, q: false, s: false, d: false },
 	_scene: undefined,
-	touch_start: { x: 0, y: 0 }, // Pour le contrôle tactile
-	touch_vector: { x: 0, y: 0 }, // Vecteur de mouvement tactile
-	joystick_base: null,
-	joystick_handle: null,
+
+	// --- Touch Controls State ---
+	move_touch: { id: -1, start: { x: 0, y: 0 }, vector: { x: 0, y: 0 } },
+	look_touch: { id: -1, start: { x: 0, y: 0 }, vector: { x: 0, y: 0 } },
+
+	// --- Joystick UI Elements ---
+	joysticks: {
+		move: { base: null, handle: null },
+		look: { base: null, handle: null },
+	},
 
 	init: function (_scene) {
 		this._scene = _scene;
-		this.createJoystick();
-		this.addListener();
+		const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+		if (isTouchDevice) {
+			this.createJoysticks();
+		}
+		this.addListeners();
 	},
 
-	createJoystick: function () {
-		this.joystick_base = document.createElement("div");
-		this.joystick_handle = document.createElement("div");
+	createJoysticks: function () {
+		const joystickStyles = {
+			base: {
+				position: "absolute",
+				width: "120px",
+				height: "120px",
+				background: "rgba(128, 128, 128, 0.5)",
+				borderRadius: "50%",
+				display: "none",
+				zIndex: "100",
+			},
+			handle: {
+				position: "absolute",
+				width: "60px",
+				height: "60px",
+				background: "rgba(200, 200, 200, 0.8)",
+				borderRadius: "50%",
+				display: "none",
+				zIndex: "101",
+			},
+		};
 
-		Object.assign(this.joystick_base.style, {
-			position: "absolute",
-			width: "120px",
-			height: "120px",
-			background: "rgba(128, 128, 128, 0.5)",
-			borderRadius: "50%",
-			display: "none", // Caché par défaut
-			zIndex: "100",
-		});
+		// Create Move Joystick
+		this.joysticks.move.base = document.createElement("div");
+		this.joysticks.move.handle = document.createElement("div");
+		Object.assign(this.joysticks.move.base.style, joystickStyles.base);
+		Object.assign(this.joysticks.move.handle.style, joystickStyles.handle);
+		document.body.appendChild(this.joysticks.move.base);
+		document.body.appendChild(this.joysticks.move.handle);
 
-		Object.assign(this.joystick_handle.style, {
-			position: "absolute",
-			width: "60px",
-			height: "60px",
-			background: "rgba(200, 200, 200, 0.8)",
-			borderRadius: "50%",
-			display: "none", // Caché par défaut
-			zIndex: "101",
-		});
-
-		document.body.appendChild(this.joystick_base);
-		document.body.appendChild(this.joystick_handle);
+		// Create Look Joystick
+		this.joysticks.look.base = document.createElement("div");
+		this.joysticks.look.handle = document.createElement("div");
+		Object.assign(this.joysticks.look.base.style, joystickStyles.base);
+		Object.assign(this.joysticks.look.handle.style, joystickStyles.handle);
+		document.body.appendChild(this.joysticks.look.base);
+		document.body.appendChild(this.joysticks.look.handle);
 	},
 
-	addListener: function () {
-		// Clavier
-		document.addEventListener("keydown", (event) => {
-			this.keys[event.key.toLowerCase()] = true;
-		});
+	addListeners: function () {
+		// --- Keyboard (for Desktop) ---
+		document.addEventListener("keydown", (e) => (this.keys[e.key.toLowerCase()] = true));
+		document.addEventListener("keyup", (e) => (this.keys[e.key.toLowerCase()] = false));
 
-		document.addEventListener("keyup", (event) => {
-			this.keys[event.key.toLowerCase()] = false;
-		});
-
-		// Tactile
-		document.addEventListener(
-			"touchstart",
-			(event) => {
-				// Uniquement sur la moitié gauche de l'écran
-				if (event.touches[0].clientX < window.innerWidth / 2) {
-					event.preventDefault();
-					this.touch_start.x = event.touches[0].clientX;
-					this.touch_start.y = event.touches[0].clientY;
-
-					// Affiche et centre le joystick
-					this.joystick_base.style.display = "block";
-					this.joystick_handle.style.display = "block";
-					this.joystick_base.style.left = `${this.touch_start.x - 60}px`;
-					this.joystick_base.style.top = `${this.touch_start.y - 60}px`;
-					this.joystick_handle.style.left = `${this.touch_start.x - 30}px`;
-					this.joystick_handle.style.top = `${this.touch_start.y - 30}px`;
+		// --- Touch (for Mobile) ---
+		document.addEventListener("touchstart", (e) => {
+			e.preventDefault();
+			for (let touch of e.changedTouches) {
+				if (touch.clientX < window.innerWidth / 2 && this.move_touch.id === -1) {
+					// --- Start Move Touch ---
+					this.move_touch.id = touch.identifier;
+					this.move_touch.start = { x: touch.clientX, y: touch.clientY };
+					this.showJoystick("move", this.move_touch.start);
+				} else if (touch.clientX >= window.innerWidth / 2 && this.look_touch.id === -1) {
+					// --- Start Look Touch ---
+					this.look_touch.id = touch.identifier;
+					this.look_touch.start = { x: touch.clientX, y: touch.clientY };
+					this.showJoystick("look", this.look_touch.start);
 				}
-			},
-			{ passive: false }
-		);
+			}
+		}, { passive: false });
 
-		document.addEventListener(
-			"touchmove",
-			(event) => {
-				// Si le toucher a commencé à gauche
-				if (this.touch_start.x !== 0) {
-					event.preventDefault();
-					const current_x = event.touches[0].clientX;
-					const current_y = event.touches[0].clientY;
-
-					this.touch_vector.x = current_x - this.touch_start.x;
-					this.touch_vector.y = current_y - this.touch_start.y;
-
-					// Limite le mouvement du handle à l'intérieur de la base
-					const angle = Math.atan2(this.touch_vector.y, this.touch_vector.x);
-					const distance = Math.min(
-						Math.sqrt(this.touch_vector.x ** 2 + this.touch_vector.y ** 2),
-						60
-					); // 60 = rayon de la base
-					const handle_x =
-						this.touch_start.x + Math.cos(angle) * distance - 30;
-					const handle_y =
-						this.touch_start.y + Math.sin(angle) * distance - 30;
-
-					this.joystick_handle.style.left = `${handle_x}px`;
-					this.joystick_handle.style.top = `${handle_y}px`;
-
-					const threshold = 20; // Seuil pour éviter les mouvements involontaires
-
-					// Simuler les touches
-					this.keys.z = this.touch_vector.y < -threshold;
-					this.keys.s = this.touch_vector.y > threshold;
-					this.keys.q = this.touch_vector.x < -threshold;
-					this.keys.d = this.touch_vector.x > threshold;
+		document.addEventListener("touchmove", (e) => {
+			e.preventDefault();
+			for (let touch of e.changedTouches) {
+				if (touch.identifier === this.move_touch.id) {
+					// --- Move Joystick Update ---
+					this.updateJoystick("move", touch);
+				} else if (touch.identifier === this.look_touch.id) {
+					// --- Look Joystick Update ---
+					this.updateJoystick("look", touch);
 				}
-			},
-			{ passive: false }
-		);
+			}
+		}, { passive: false });
 
-		document.addEventListener("touchend", () => {
-			// Réinitialiser si le toucher a commencé
-			if (this.touch_start.x !== 0) {
-				this.keys = { z: false, q: false, s: false, d: false };
-				this.touch_start = { x: 0, y: 0 };
-				this.touch_vector = { x: 0, y: 0 };
-				this.joystick_base.style.display = "none";
-				this.joystick_handle.style.display = "none";
+		document.addEventListener("touchend", (e) => {
+			for (let touch of e.changedTouches) {
+				if (touch.identifier === this.move_touch.id) {
+					// --- End Move Touch ---
+					this.resetJoystick("move");
+				} else if (touch.identifier === this.look_touch.id) {
+					// --- End Look Touch ---
+					this.resetJoystick("look");
+				}
 			}
 		});
 	},
+
+	// --- Joystick Helper Functions ---
+	showJoystick: function (type, startPos) {
+		const { base, handle } = this.joysticks[type];
+		base.style.display = "block";
+		handle.style.display = "block";
+		base.style.left = `${startPos.x - 60}px`;
+		base.style.top = `${startPos.y - 60}px`;
+		handle.style.left = `${startPos.x - 30}px`;
+		handle.style.top = `${startPos.y - 30}px`;
+	},
+
+	updateJoystick: function (type, touch) {
+		const state = this[`${type}_touch`];
+		const { handle } = this.joysticks[type];
+
+		state.vector = { x: touch.clientX - state.start.x, y: touch.clientY - state.start.y };
+		const angle = Math.atan2(state.vector.y, state.vector.x);
+		const distance = Math.min(Math.sqrt(state.vector.x ** 2 + state.vector.y ** 2), 60);
+
+		handle.style.left = `${state.start.x + Math.cos(angle) * distance - 30}px`;
+		handle.style.top = `${state.start.y + Math.sin(angle) * distance - 30}px`;
+	},
+
+	resetJoystick: function (type) {
+		const state = this[`${type}_touch`];
+		const { base, handle } = this.joysticks[type];
+
+		state.id = -1;
+		state.vector = { x: 0, y: 0 };
+		base.style.display = "none";
+		handle.style.display = "none";
+	},
+
+	// --- Player Update Functions ---
 	updatePlayerMovement: function () {
-		let direction = new THREE.Vector3();
+		// Update keys based on move joystick
+		const threshold = 20;
+		this.keys.z = this.move_touch.vector.y < -threshold;
+		this.keys.s = this.move_touch.vector.y > threshold;
+		this.keys.q = this.move_touch.vector.x < -threshold;
+		this.keys.d = this.move_touch.vector.x > threshold;
+
+		// Apply movement
+		const direction = new THREE.Vector3();
 		this._scene.camera.getWorldDirection(direction);
-		// direction.y = 0; // Supprime le mouvement vertical (évite de voler)
+		const right = new THREE.Vector3().crossVectors(this._scene.camera.up, direction).normalize();
 
-		let right = new THREE.Vector3();
-		right.crossVectors(this._scene.camera.up, direction).normalize(); // Calcul du vecteur latéral
+		if (this.keys.z) this._scene.camera.position.addScaledVector(direction, this.moveSpeed);
+		if (this.keys.s) this._scene.camera.position.addScaledVector(direction, -this.moveSpeed);
+		if (this.keys.q) this._scene.camera.position.addScaledVector(right, this.moveSpeed);
+		if (this.keys.d) this._scene.camera.position.addScaledVector(right, -this.moveSpeed);
+	},
 
-		if (this.keys.z)
-			this._scene.camera.position.addScaledVector(direction, this.moveSpeed);
-		if (this.keys.s)
-			this._scene.camera.position.addScaledVector(direction, -this.moveSpeed);
-		if (this.keys.q)
-			this._scene.camera.position.addScaledVector(right, this.moveSpeed);
-		if (this.keys.d)
-			this._scene.camera.position.addScaledVector(right, -this.moveSpeed);
+	updateCameraRotation: function () {
+		if (this.look_touch.id === -1) return;
+
+		const euler = new THREE.Euler(0, 0, 0, 'YXZ');
+		euler.setFromQuaternion(this._scene.camera.quaternion);
+
+		euler.y -= this.look_touch.vector.x * this.lookSpeed;
+		euler.x -= this.look_touch.vector.y * this.lookSpeed;
+
+		// Clamp vertical rotation
+		euler.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.x));
+
+		this._scene.camera.quaternion.setFromEuler(euler);
+
+		// Reset vector to prevent continuous rotation after finger stops moving
+		this.look_touch.vector = { x: 0, y: 0 };
 	},
 };
+
 export { _move };

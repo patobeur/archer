@@ -52,9 +52,12 @@ const _scene  = {
 		document.body.appendChild(this.renderer.domElement);
 
 		// Controls
-		this.controls = new PointerLockControls(this.camera, document.body);
-		document.addEventListener('click', () => this.controls.lock());
-		this.scene.add(this.controls.getObject());
+		const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+		if (!isTouchDevice) {
+			this.controls = new PointerLockControls(this.camera, document.body);
+			document.addEventListener('click', () => this.controls.lock());
+			this.scene.add(this.controls.getObject());
+		}
 
 		// Lights
 		const light = new THREE.DirectionalLight(0xffffff, 1);

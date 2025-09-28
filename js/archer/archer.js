@@ -96,7 +96,8 @@ let game = {
     animate:function(){
         game.delta = game.clock.getDelta();
         requestAnimationFrame(game.animate);
-        _move.updatePlayerMovement(); 
+        _move.updatePlayerMovement();
+        _move.updateCameraRotation();
         _arrows.checkArrows();
         _scene.renderer.render(_scene.scene, _scene.camera);
         game.stats.update();
