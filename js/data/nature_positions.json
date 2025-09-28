@@ -1,0 +1,32 @@
+[
+  {
+    "name": "BigTreeWithLeaves",
+    "position": { "x": -50, "y": 0, "z": -60 },
+    "rotation": { "x": 0, "y": 0, "z": 0 },
+    "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+    "name": "SmallBush",
+    "position": { "x": -40, "y": 0, "z": -50 },
+    "rotation": { "x": 0, "y": 0, "z": 0 },
+    "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+    "name": "BigBush",
+    "position": { "x": 50, "y": 0, "z": -80 },
+    "rotation": { "x": 0, "y": 0.5, "z": 0 },
+    "scale": { "x": 1.2, "y": 1.2, "z": 1.2 }
+  },
+  {
+    "name": "TreeNoLeavesBig",
+    "position": { "x": 80, "y": 0, "z": -70 },
+    "rotation": { "x": 0, "y": 0, "z": 0 },
+    "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+  {
+    "name": "SmallTreeWithLeave",
+    "position": { "x": 60, "y": 0, "z": -40 },
+    "rotation": { "x": 0, "y": 0, "z": 0 },
+    "scale": { "x": 1, "y": 1, "z": 1 }
+  }
+]

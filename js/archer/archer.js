@@ -8,6 +8,7 @@ import { _board } from '../board.js';
 import { _score } from '../score.js';
 import { _front } from '../front.js';
 import { _createClouds  } from '../3d/lib/nuages2.js';
+import { _populateNature } from '../modules/populate_nature.js';
 
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 
@@ -61,6 +62,7 @@ let game = {
         )
         _score.init()
         _scene.init()
+        _populateNature.init(_scene.scene);
         _move.init(_scene)
         _cibles.init(_scene)
         _arrows.init(_scene,_cibles,_score,this.gravity,this.Font)
@@ -72,8 +74,8 @@ let game = {
         _createStars(_scene.scene, 2000, 800);
         this.createClouds = new _createClouds(_scene.scene, _scene.camera);
         // _createClouds.init(_scene.scene, _scene.camera);
-        
-        
+
+
                         const discGeometry = new THREE.BoxGeometry(1,1,1);
                         const discMaterial = new THREE.MeshStandardMaterial({color: 0x000000,emissive: 0x000000} );
                         const disc = new THREE.Mesh(discGeometry, discMaterial);
@@ -83,11 +85,11 @@ let game = {
                         disc.receiveShadow = true;
                         _scene.scene.add(disc);
                         _arrows.addCible(disc)
-        
-        
+
+
         // Animate
         this.animate();
-        
+
         let mire = _front.createDiv({
             style:{backgroundColor:"black",position:'absolute',top:"calc( 50% - 1px)",left:"calc( 50% - 1px)",width:"4px",height:"4px"}
         })
