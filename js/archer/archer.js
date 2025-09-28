@@ -171,9 +171,6 @@ let game = {
                         _arrows.addCible(disc)
 
 
-        // Animate
-        this.animate();
-
         let mire = _front.createDiv({
             style:{backgroundColor:"black",position:'absolute',top:"calc( 50% - 1px)",left:"calc( 50% - 1px)",width:"4px",height:"4px", zIndex: "30"}
         })
@@ -197,6 +194,9 @@ let game = {
             }
         });
         document.body.appendChild(this.warningMessage);
+
+        // Animate
+        this.animate();
     },
     checkPlayerPosition: function() {
         const playerPosition = _scene.camera.position;
