@@ -9,6 +9,8 @@ import { _score } from '../score.js';
 import { _front } from '../front.js';
 import { _createClouds  } from '../3d/lib/nuages2.js';
 import { _populateNature } from '../modules/populate_nature.js';
+import { _populateForest } from '../modules/populate_forest.js';
+import { config } from '../config.js';
 
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 
@@ -62,7 +64,13 @@ let game = {
         )
         _score.init()
         _scene.init()
-        _populateNature.init(_scene.scene);
+
+        if (config.environment === 'forest') {
+            _populateForest.init(_scene.scene);
+        } else {
+            _populateNature.init(_scene.scene);
+        }
+
         _move.init(_scene)
         _cibles.init(_scene)
         _arrows.init(_scene,_cibles,_score,this.gravity,this.Font)
