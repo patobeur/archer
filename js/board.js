@@ -1,9 +1,9 @@
-
 import { _front } from './front.js';
 import { _score } from './score.js';
 const _board = {
     gameName:undefined,width:undefined,height:undefined,
     board:undefined,scoreBoard:undefined,bestScoreBoard:undefined,
+    topBar:undefined,
     rules:{board:false,scoreBoard:false,bestScoreBoard:false},
     init: function (gameName,rules,stringcss) {
         this.rules.board=rules.board??false
@@ -13,13 +13,14 @@ const _board = {
         this.initBodyCss(stringcss)
 	},
 	createBoard: function () {
+        this.topBar = _front.createDiv({tag:'div',style:{},attributes:{className:'top-bar'}})
         if(this.rules.board) this.board = _front.createDiv({tag:'div',style:{},attributes:{id:'container',className:'container'}})
         if(this.rules.scoreBoard) this.scoreBoard = _front.createDiv({tag:'div',style:{},attributes:{textContent:`${_score.score}`,className:'score'}})
         if(this.rules.bestScoreBoard) this.bestScoreBoard = _front.createDiv({tag:'div',style:{},attributes:{textContent:`Top ${_score.bestScore}`,className:'bestscore'}})
-        
 	},
     addToDom: function () {
-        document.body.prepend(this.scoreBoard,this.bestScoreBoard)
+        this.topBar.append(this.scoreBoard,this.bestScoreBoard)
+        document.body.prepend(this.topBar)
         if(this.rules.board) {
             document.body.prepend(this.board)
             this.updateDimensions();
