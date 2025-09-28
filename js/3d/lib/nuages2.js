@@ -170,6 +170,7 @@ class CloudGroup {
 
 class _createClouds {
     constructor(scene, target, maxClouds = 70, spawnRate = 1500, numSpheresPerGroup = 5, spawnDistance = 200, speed = 0.05, directionChangeRate = 15000) {
+        console.log('[nuages2.js] _createClouds constructor called');
         this.scene = scene;
         this.target = target;
         this.maxClouds = maxClouds;

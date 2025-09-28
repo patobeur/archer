@@ -73,6 +73,7 @@ const _arrows = {
     Font: undefined,
 
     init: function (_scene, _cibles, _score, gravity, Font) {
+        console.log('[arrows5.js] _arrows.init() called');
         this.Font = Font;
         this.impactSound = new Audio('./assets/whoosh.mp3');
         this.bowModel = _equipements.bows[2];

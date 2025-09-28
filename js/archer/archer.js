@@ -9,9 +9,6 @@ import { _score } from '../score.js';
 import { _front } from '../front.js';
 import { _createClouds  } from '../3d/lib/nuages2.js';
 
-import { _obj } from './datas/obj.js';
-import { _textures } from './datas/textures.js';
-import { _GLTFLoader, _TextureLoader } from '../3d/loaders.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 
 import { _scene } from './scene.js';
@@ -27,13 +24,21 @@ let game = {
     createClouds:undefined,
     Font:undefined,
     init:function(){
-        console.log('loading Font')
+        console.log('[archer.js] game.init() called');
+        console.log('loading Font');
         const loader = new FontLoader();
-        loader.load('./node_modules_min/three/examples/fonts/helvetiker_regular.typeface.json', (font) => {
-            this.Font = font;
-            console.log('Font loading ok')
-            this.next1();
-        })
+        loader.load(
+            'https://unpkg.com/three@0.160.0/examples/fonts/helvetiker_regular.typeface.json',
+            (font) => {
+                this.Font = font;
+                console.log('Font loading ok');
+                this.next1();
+            },
+            undefined,
+            (error) => {
+                console.error('An error occurred while loading the font:', error);
+            }
+        );
     },
     next1:function(){
         this.next2();

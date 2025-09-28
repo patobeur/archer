@@ -3,6 +3,7 @@ const _cibles = {
     cible:undefined,
     _scene:undefined,
     init:function (_scene) {
+        console.log('[cibles.js] _cibles.init() called');
         this._scene = _scene
         this.createCible();
     },
