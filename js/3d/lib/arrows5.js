@@ -69,13 +69,15 @@ const _arrows = {
     bowModel: undefined,
     arrowModel: undefined,
     ToutesLesCible: [],
+    shootSound: undefined,
     impactSound: undefined,
     Font: undefined,
 
     init: function (_scene, _cibles, _score, gravity, Font) {
         console.log('[arrows5.js] _arrows.init() called');
         this.Font = Font;
-        this.impactSound = new Audio('./assets/whoosh.mp3');
+        this.shootSound = new Audio('./assets/whoosh.mp3');
+        this.impactSound = new Audio('./assets/whoosh.mp3'); // Placeholder, can be changed to a different sound
         this.bowModel = _equipements.bows[2];
         this.arrowModel = _equipements.arrows[2];
         this._cibles = _cibles;
@@ -143,6 +145,7 @@ const _arrows = {
 
         _arrows.shootedArrows++;
         _arrows._scene.scene.add(arrow);
+        _arrows.shootSound.play();
     },
 
     checkCollision: function (arrow, previousPosition) {
@@ -179,6 +182,7 @@ const _arrows = {
             }
 
             this.impactSound.play();
+
             return; // Sortir après la première collision
         }
 
