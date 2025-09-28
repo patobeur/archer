@@ -43,6 +43,10 @@ Le jeu charge les ressources suivantes :
 
 Toutes les importations liées aux chargeurs de modèles 3D externes (par exemple, `OBJLoader`, `GLTFLoader`) sont considérées comme du code hérité et ne sont pas utilisées dans la version actuelle du jeu. C'est une considération importante pour le développement futur.
 
+Sound Effect by <a href="https://pixabay.com/fr/users/djartmusic-46653586/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=306041">Krzysztof Szymanski</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=306041">Pixabay</a>
+
+---
+
 # Archer: A 3D Archery Game
 
 This project is a first-person 3D archery game where the player can shoot arrows at targets.
