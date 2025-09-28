@@ -76,6 +76,29 @@ const _arrows = {
 	arrowModel: undefined,
 	ToutesLesCible: [],
 	Font: undefined,
+    wind: new THREE.Vector3(0, 0, 0),
+    windIndicator: {
+        arrow: null,
+        text: null,
+    },
+
+	updateWind: function() {
+        // Simple random wind simulation
+        if (Math.random() < 0.005) { // Change wind direction and strength periodically
+            this.wind.x = (Math.random() - 0.5) * 0.1; // Wind along X-axis
+            this.wind.z = (Math.random() - 0.5) * 0.1; // Wind along Z-axis
+            console.log(`💨 New wind: x=${this.wind.x.toFixed(2)}, z=${this.wind.z.toFixed(2)}`);
+
+            if (this.windIndicator.arrow && this.windIndicator.text) {
+                const windStrength = this.wind.length();
+                this.windIndicator.text.innerHTML = `Wind: ${(windStrength * 100).toFixed(0)}%`;
+
+                // Rotate the arrow indicator
+                const angle = Math.atan2(this.wind.z, this.wind.x);
+                this.windIndicator.arrow.style.transform = `rotate(${angle}rad)`;
+            }
+        }
+    },
 
 	init: function (_scene, _cibles, _score, gravity, Font, selectedBow) {
 		console.log("[arrows5.js] _arrows.init() called");
@@ -101,7 +124,36 @@ const _arrows = {
 			    document.addEventListener("click", _arrows.shootArrow);
             }, 0);
 		}
+        this.createWindIndicator();
 	},
+
+    createWindIndicator: function() {
+        const windContainer = document.createElement('div');
+        windContainer.style.position = 'absolute';
+        windContainer.style.top = '10px';
+        windContainer.style.left = '50%';
+        windContainer.style.transform = 'translateX(-50%)';
+        windContainer.style.color = 'white';
+        windContainer.style.fontSize = '16px';
+        windContainer.style.backgroundColor = 'rgba(0,0,0,0.5)';
+        windContainer.style.padding = '5px 10px';
+        windContainer.style.borderRadius = '5px';
+        windContainer.style.display = 'flex';
+        windContainer.style.alignItems = 'center';
+        document.body.appendChild(windContainer);
+
+        const windArrow = document.createElement('span');
+        windArrow.innerHTML = '➔';
+        windArrow.style.marginRight = '5px';
+        windArrow.style.display = 'inline-block';
+        windContainer.appendChild(windArrow);
+        this.windIndicator.arrow = windArrow;
+
+        const windText = document.createElement('span');
+        windText.innerHTML = 'Wind: 0%';
+        windContainer.appendChild(windText);
+        this.windIndicator.text = windText;
+    },
 
 	createShootButton: function () {
 		const button = document.createElement("button");
@@ -255,7 +307,9 @@ const _arrows = {
 					.clone()
 					.multiplyScalar(-friction);
 
-				let totalForce = forceGravity.add(forceFriction);
+				let forceWind = _arrows.wind.clone();
+
+				let totalForce = forceGravity.add(forceFriction).add(forceWind);
 				let acceleration = totalForce.divideScalar(mass);
 
 				arrow.velocity.add(acceleration.multiplyScalar(dt));

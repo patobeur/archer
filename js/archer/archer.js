@@ -181,6 +181,7 @@ let game = {
         _move.updatePlayerMovement();
         _move.updateCameraRotation();
         _arrows.checkArrows();
+        _arrows.updateWind();
         _scene.renderer.render(_scene.scene, _scene.camera);
         game.stats.update();
         game.createClouds.update();
