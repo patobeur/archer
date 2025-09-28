@@ -68,8 +68,7 @@ let game = {
         _cibles.init(_scene)
 
         if (config.environment === 'forest') {
-            const targets = [_cibles.cible.position];
-            _populateForest.init(_scene.scene, targets);
+            _populateForest.init(_scene.scene);
         } else {
             _populateNature.init(_scene.scene);
         }

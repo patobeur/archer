@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const _populateForest = {
-    init: function(scene, targets = []) {
-        console.log('[populate_forest.js] Initializing procedural forest with exclusion zones...');
+    init: function(scene) {
+        console.log('[populate_forest.js] Initializing forest in a ring layout...');
 
         const loader = new GLTFLoader();
         const modelUrl = './assets/3dObjects/Forest.glb';
@@ -24,7 +24,7 @@ const _populateForest = {
                     gltf.scene.remove(gltf.scene.children[0]);
                 }
 
-                this.generateForest(scene, processedTemplates, targets);
+                this.generateForest(scene, processedTemplates);
             } else {
                 console.error('[populate_forest.js] No suitable tree templates found in the GLB file.');
             }
@@ -34,64 +34,23 @@ const _populateForest = {
         });
     },
 
-    isPositionInExclusionZone: function(x, z, targets, playerPos, playerRadius, targetRadius, corridorWidth) {
-        // 1. Check player exclusion zone
-        if (Math.sqrt(Math.pow(x - playerPos.x, 2) + Math.pow(z - playerPos.z, 2)) < playerRadius) {
-            return true;
-        }
-
-        // 2. Check zones for each target
-        for (const target of targets) {
-            const targetPos = { x: target.x, z: target.z };
-
-            // Check target exclusion zone
-            if (Math.sqrt(Math.pow(x - targetPos.x, 2) + Math.pow(z - targetPos.z, 2)) < targetRadius) {
-                return true;
-            }
-
-            // Check corridor exclusion zone
-            const vecPlayerToTarget = { x: targetPos.x - playerPos.x, z: targetPos.z - playerPos.z };
-            const vecPlayerToTree = { x: x - playerPos.x, z: z - playerPos.z };
-            const lenSqPlayerToTarget = vecPlayerToTarget.x * vecPlayerToTarget.x + vecPlayerToTarget.z * vecPlayerToTarget.z;
-
-            if (lenSqPlayerToTarget === 0) continue;
-
-            const dotProduct = vecPlayerToTree.x * vecPlayerToTarget.x + vecPlayerToTree.z * vecPlayerToTarget.z;
-
-            // Check if the tree is longitudinally between the player and target
-            if (dotProduct > 0 && dotProduct < lenSqPlayerToTarget) {
-                const crossProduct = vecPlayerToTree.x * vecPlayerToTarget.z - vecPlayerToTree.z * vecPlayerToTarget.x;
-                const distanceToLine = Math.abs(crossProduct) / Math.sqrt(lenSqPlayerToTarget);
-
-                if (distanceToLine < corridorWidth / 2) {
-                    return true; // Point is in the corridor
-                }
-            }
-        }
-        return false; // Position is valid
-    },
-
-    generateForest: function(scene, processedTemplates, targets) {
-        const numberOfTrees = 200;
-        const areaSize = 300;
-
-        // --- Exclusion Zone Parameters ---
-        const playerPos = { x: 0, z: 0 };
-        const playerExclusionRadius = 15;
-        const targetExclusionRadius = 15;
-        const corridorWidth = 10;
-        // ---------------------------------
+    generateForest: function(scene, processedTemplates) {
+        const numberOfTrees = 250; // Increased density for the ring
+        const outerRadius = 150;
+        const innerRadius = 50; // Large clear area in the center
 
         for (let i = 0; i < numberOfTrees; i++) {
             const { template, verticalOffset } = processedTemplates[Math.floor(Math.random() * processedTemplates.length)];
             const tree = template.clone(true);
 
-            // Set random position, respecting exclusion zones
-            let x, z;
+            // Generate a position within the ring
+            let x, z, distance;
             do {
-                x = (Math.random() - 0.5) * areaSize;
-                z = (Math.random() - 0.5) * areaSize;
-            } while (this.isPositionInExclusionZone(x, z, targets, playerPos, playerExclusionRadius, targetExclusionRadius, corridorWidth));
+                // Generate a point in the square bounding the outer circle
+                x = (Math.random() - 0.5) * outerRadius * 2;
+                z = (Math.random() - 0.5) * outerRadius * 2;
+                distance = Math.sqrt(x*x + z*z);
+            } while (distance > outerRadius || distance < innerRadius); // Keep generating until it's in the ring
 
             const baseScale = 4.0 + Math.random() * 3.0;
             const heightVariation = 0.8 + Math.random() * 0.4;
@@ -113,7 +72,8 @@ const _populateForest = {
             });
             scene.add(tree);
         }
-        console.log(`[populate_forest.js] Generated a forest with ${numberOfTrees} trees, respecting exclusion zones.`);
+
+        console.log(`[populate_forest.js] Generated a forest with ${numberOfTrees} trees in a ring layout.`);
     }
 };
 
