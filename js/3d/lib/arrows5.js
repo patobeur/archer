@@ -32,7 +32,7 @@ const _equipements = {
         4: { name: "arc long moyen", power: 1.8, speed: 9, length: 1.8 },
         5: { name: "arc long adulte", power: 2, speed: 10, length: 2.0 },
     },
-    
+
     arrows: {
         0: { name: "simple", longueur: 2, diametre: 0.045, bonus: { power: 0.2, windResist: 0.002, gravityResist: 0.0002 }, color: 0xffff00,
             userData: {
@@ -98,7 +98,7 @@ const _arrows = {
         if (_arrows.arrows.length >= _arrows.maxArrows) {
             _arrows.resetArrows();
         }
-    
+
         const arrowGeometry = new THREE.CylinderGeometry(
             _arrows.arrowModel.diametre,
             _arrows.arrowModel.diametre,
@@ -110,29 +110,29 @@ const _arrows = {
             emissive: 0xffff00
         });
         const arrow = new THREE.Mesh(arrowGeometry, arrowMaterial);
-    
+
         // 🔴 Pointe de la flèche (collision)
         const sphereGeometry = new THREE.SphereGeometry(0.05, 8, 8);
         const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
         const arrowTip = new THREE.Mesh(sphereGeometry, sphereMaterial);
         arrowTip.position.set(0, _arrows.arrowModel.longueur / 2, 0);
         arrow.add(arrowTip);
-    
+
         let arrowPosition = new THREE.Vector3();
         _arrows._scene.camera.getWorldPosition(arrowPosition);
         let forward = new THREE.Vector3();
         _arrows._scene.camera.getWorldDirection(forward);
         arrowPosition.addScaledVector(forward, 1.5);
         arrow.position.copy(arrowPosition);
-    
+
         let baseSpeed = _arrows.bowModel.speed;
         let arrowBonus = _arrows.arrowModel.bonus.power;
         let initialVelocity = forward.clone().multiplyScalar(baseSpeed + arrowBonus);
-        
+
         arrow.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), initialVelocity.clone().normalize());
-    
+
         console.log(`🏹 Flèche tirée ! Vitesse initiale : ${initialVelocity.length().toFixed(2)}`);
-    
+
         _arrows.arrows.push({
             mesh: arrow,
             tip: arrowTip,
@@ -140,91 +140,80 @@ const _arrows = {
             stopped: false,
             userData: _arrows.arrowModel.userData
         });
-    
+
         _arrows.shootedArrows++;
         _arrows._scene.scene.add(arrow);
     },
-    
-    
 
-    checkCollision: function (arrow) {
+    checkCollision: function (arrow, previousPosition) {
         if (arrow.stopped) return;
-    
-        let previousPosition = arrow.mesh.position.clone();
-        let numSteps = 20; // Augmenter la précision
-    
-        const raycaster = new THREE.Raycaster();
-        raycaster.set(previousPosition, arrow.velocity.clone().normalize());
-    
-        this.ToutesLesCible.forEach(cible => {
-            if (!cible.boundingBox) {
-                cible.boundingBox = new THREE.Box3();
+
+        const currentPosition = arrow.mesh.position;
+        const displacement = new THREE.Vector3().subVectors(currentPosition, previousPosition);
+        const distance = displacement.length();
+
+        if (distance === 0) return;
+
+        const raycaster = new THREE.Raycaster(
+            previousPosition,
+            displacement.normalize(),
+            0,
+            distance
+        );
+
+        const intersects = raycaster.intersectObjects(this.ToutesLesCible, true);
+
+        if (intersects.length > 0) {
+            const intersection = intersects[0];
+            console.log("💥 Collision détectée via Raycaster !");
+
+            // Placer la flèche exactement au point d'impact
+            arrow.mesh.position.copy(intersection.point);
+
+            arrow.velocity.set(0, 0, 0);
+            arrow.stopped = true;
+
+            // Ajouter des points au score
+            if (intersection.object.userData.points) {
+                this._score.addToScore(intersection.object.userData.points);
             }
-            cible.boundingBox.setFromObject(cible); // Mise à jour en temps réel
-    
-            // Vérification avec Raycaster
-            const intersects = raycaster.intersectObject(cible, true);
-            if (intersects.length > 0 && intersects[0].distance < arrow.velocity.length() * 0.1) {
-                console.log("💥 Collision détectée via Raycaster !");
-                arrow.velocity.set(0, 0, 0);
-                // Ajouter des points au score
-                this._score.addToScore(intersects[0].object.userData.points);
-                arrow.stopped = true;
-                return;
-            }
-    
-            // Vérification avec interpolation (fallback)
-            for (let i = 1; i <= numSteps; i++) {
-                let factor = i / numSteps;
-                let interpolatedPosition = new THREE.Vector3().lerpVectors(previousPosition, arrow.mesh.position, factor);
-                let testSphere = new THREE.Sphere(interpolatedPosition, 0.05);
-    
-                if (cible.boundingBox.intersectsSphere(testSphere)) {
-                    console.log("💥 Collision détectée !");
-                    arrow.velocity.set(0, 0, 0);
-                    // Ajouter des points au score
-                    this._score.addToScore(intersects[0].object.userData.points);
-                    arrow.stopped = true;
-                    return;
-                }
-            }
-        });
-    
+
+            this.impactSound.play();
+            return; // Sortir après la première collision
+        }
+
         this.checkGroundCollision(arrow);
     },
-    
 
     checkArrows: function () {
-    
         this.arrows.forEach(arrow => {
             if (!arrow.stopped) {
-
                 let dt = arrow.userData.dt;
-                let friction = arrow.userData.friction; 
-                let mass = arrow.userData.mass; 
-                let gravityScale = arrow.userData.gravityScale; 
+                let friction = arrow.userData.friction;
+                let mass = arrow.userData.mass;
+                let gravityScale = arrow.userData.gravityScale;
 
                 let forceGravity = _arrows.gravity.clone().multiplyScalar(mass * gravityScale);
                 let forceFriction = arrow.velocity.clone().multiplyScalar(-friction);
-    
+
                 let totalForce = forceGravity.add(forceFriction);
                 let acceleration = totalForce.divideScalar(mass);
-    
-                // if (arrow.velocity.length() > 0.1) {
-                    arrow.velocity.add(acceleration.multiplyScalar(dt));
-                // }
-    
+
+                arrow.velocity.add(acceleration.multiplyScalar(dt));
+
+                const previousPosition = arrow.mesh.position.clone();
                 arrow.mesh.position.add(arrow.velocity.clone().multiplyScalar(dt));
-    
+
                 // **Tourner la flèche pour suivre la trajectoire**
-                arrow.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), arrow.velocity.clone().normalize());
-    
-                this.checkCollision(arrow);
+                if (arrow.velocity.length() > 0) {
+                    arrow.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), arrow.velocity.clone().normalize());
+                }
+
+                this.checkCollision(arrow, previousPosition);
             }
         });
     },
-    
-    
+
     checkGroundCollision: function (arrow) {
         if (arrow.stopped) return;
         // Vérifier si la flèche touche le sol (z = 0)
