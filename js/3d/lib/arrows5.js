@@ -100,6 +100,12 @@ const _arrows = {
 		this._scene = _scene;
 		this.gravity = gravity;
 		document.addEventListener("click", _arrows.shootArrow);
+		document.addEventListener("touchstart", (event) => {
+			// Déclencher le tir uniquement si le toucher a lieu sur la moitié droite de l'écran
+			if (event.touches[0].clientX > window.innerWidth / 2) {
+				_arrows.shootArrow();
+			}
+		});
 	},
 
 	addCible: function (cibleMesh) {
