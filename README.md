@@ -2,6 +2,8 @@
 
 Ce projet est un jeu de tir à l'arc en 3D à la première personne où le joueur peut tirer des flèches sur des cibles.
 
+-  [Archer test](https://patobeur.github.io/archer/) .
+
 ## Technologies utilisées
 
 -  **Three.js** : Le cœur du projet est construit avec Three.js, une bibliothèque graphique 3D populaire pour JavaScript.
