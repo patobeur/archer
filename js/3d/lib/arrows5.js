@@ -277,7 +277,7 @@ const _arrows = {
 					.multiplyScalar(mass * gravityScale);
 				let forceFriction = arrow.velocity
 					.clone()
--					.multiplyScalar(-friction);
+					.multiplyScalar(-friction);
 
 				let forceWind = _arrows.wind
 					.clone()
