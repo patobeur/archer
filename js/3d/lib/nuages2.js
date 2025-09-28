@@ -10,6 +10,21 @@ class WindArrow {
         let vent = _front.createDiv({
             style:{backgroundColor:"black",position:'absolute',bottom:'10px',right:'10px',width:"30px",height:"30px",transform:"rotate(90deg)"}
         })
+        this.windStrengthIndicator = _front.createDiv({
+            attributes: { id: 'windStrengthIndicator' },
+            style: {
+                position: 'absolute',
+                top: '10px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                color: 'white',
+                fontSize: '16px',
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                padding: '5px 10px',
+                borderRadius: '5px',
+            }
+        });
+        document.body.appendChild(this.windStrengthIndicator);
         this.chaussette = _front.createDiv({
             style:{backgroundColor:"white",width:"30px",height:"30px"}
         })
@@ -55,23 +70,23 @@ class WindArrow {
     updateFrame() {
         // Calculer l'angle du vent en radians
         const angleWind = Math.atan2(-this.currentWindDirection.x, -this.currentWindDirection.z); // Inversion ici
-    
+
         // Récupérer la rotation de la caméra via sa matrice
         const cameraMatrix = new THREE.Matrix4();
         cameraMatrix.extractRotation(this.target.matrixWorld);
         const cameraDirection = new THREE.Vector3(0, 0, -1).applyMatrix4(cameraMatrix);
-    
+
         // Calculer l'angle de la caméra en radians
         const angleCamera = Math.atan2(cameraDirection.x, cameraDirection.z);
-    
+
         // Ajuster la rotation pour prendre en compte la caméra
         this.group.rotation.y = angleWind - angleCamera;
 
         const angleDeg = THREE.MathUtils.radToDeg(angleWind - angleCamera);
         this.chaussette.style.transform = "rotate("+-angleDeg+"deg)"
-        
+
     }
-    
+
 }
 
 class CloudGroup {
@@ -219,6 +234,10 @@ class _createClouds {
 
         const angleRad = Math.atan2(this.direction.x, this.direction.z);
         const angleDeg = THREE.MathUtils.radToDeg(angleRad);
+
+        if (this.windArrow.windStrengthIndicator) {
+            this.windArrow.windStrengthIndicator.innerHTML = `Wind: ${(this.speed * 1000).toFixed(0)}%`;
+        }
 
         console.log(`🌬️ Nouvelle direction du vent:
         - Radians: ${angleRad.toFixed(3)}
