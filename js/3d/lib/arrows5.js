@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { TextGeometry } from "three/addons/geometries/TextGeometry.js";
 import { MeshBasicMaterial } from "three";
+import { _move } from '../../move.js';
 
 const _labels = {
 	getLabels: function (font, txt) {
@@ -96,10 +97,13 @@ const _arrows = {
 		if (isTouchDevice) {
 			this.createShootButton();
 		} else {
-            // Delay attaching the event listener to prevent the bow selection click from firing an arrow.
-            setTimeout(() => {
-			    document.addEventListener("click", _arrows.shootArrow);
-            }, 0);
+            // No longer need the global click listener, shooting is handled by pointer lock
+            document.addEventListener("mousedown", (event) => {
+                // Check for left mouse button (button code 0)
+                if (event.button === 0) {
+                    _arrows.shootArrow();
+                }
+            });
 		}
 	},
 
@@ -135,6 +139,8 @@ const _arrows = {
 	},
 
 	shootArrow: function () {
+        if (!_move.isPointerLocked) return; // Do not shoot if pointer is not locked
+
 		if (_arrows.arrows.length >= _arrows.maxArrows) {
 			_arrows.resetArrows();
 		}

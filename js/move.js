@@ -13,6 +13,8 @@ const _move = {
 	// --- Joystick UI ---
 	joystick_move: { base: null, handle: null },
 
+	isPointerLocked: false, // Track pointer lock state
+
 	init: function (_scene) {
 		this._scene = _scene;
 		const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -55,6 +57,38 @@ const _move = {
 		// Keyboard (Desktop)
 		document.addEventListener("keydown", (e) => (this.keys[e.key.toLowerCase()] = true));
 		document.addEventListener("keyup", (e) => (this.keys[e.key.toLowerCase()] = false));
+
+        // --- Mouse and Pointer Lock (Desktop) ---
+        const sceneContainer = document.getElementById('scene-container');
+        if (sceneContainer) {
+            sceneContainer.addEventListener('click', () => {
+                const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+                if (!this.isPointerLocked && !isTouchDevice) {
+                    document.body.requestPointerLock();
+                }
+            });
+        }
+
+        const pointerLockChanged = () => {
+            this.isPointerLocked = document.pointerLockElement === document.body;
+        };
+
+        document.addEventListener('pointerlockchange', pointerLockChanged, false);
+        document.addEventListener('pointerlockerror', () => { this.isPointerLocked = false; }, false);
+
+        document.addEventListener('mousemove', (event) => {
+            if (!this.isPointerLocked) return;
+
+            const euler = new THREE.Euler(0, 0, 0, 'YXZ');
+		    euler.setFromQuaternion(this._scene.camera.quaternion);
+
+		euler.y -= event.movementX * this.lookSpeed;
+		euler.x -= event.movementY * this.lookSpeed;
+
+            euler.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.x));
+
+		    this._scene.camera.quaternion.setFromEuler(euler);
+        });
 
 		// Touch (Mobile)
 		document.addEventListener("touchstart", (e) => {
