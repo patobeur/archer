@@ -67,9 +67,13 @@ class WindArrow {
         this.currentWindDirection.copy(newDirection);
     }
 
-    updateFrame() {
+    updateFrame(windSpeed = 0) {
         // Calculer l'angle du vent en radians
         const angleWind = Math.atan2(-this.currentWindDirection.x, -this.currentWindDirection.z); // Inversion ici
+
+        if (this.windStrengthIndicator) {
+            this.windStrengthIndicator.innerHTML = `Wind: ${(windSpeed * 1000).toFixed(0)}%`;
+        }
 
         // Récupérer la rotation de la caméra via sa matrice
         const cameraMatrix = new THREE.Matrix4();
@@ -198,7 +202,7 @@ class _createClouds {
 
         this.windArrow = new WindArrow(target);
         this.windArrow.updateWindDirection(this.direction);
-        this.windArrow.updateFrame(this.direction);
+        this.windArrow.updateFrame(this.speed);
 
         this.startSpawning();
         this.changeDirectionPeriodically(directionChangeRate);
@@ -235,10 +239,6 @@ class _createClouds {
         const angleRad = Math.atan2(this.direction.x, this.direction.z);
         const angleDeg = THREE.MathUtils.radToDeg(angleRad);
 
-        if (this.windArrow.windStrengthIndicator) {
-            this.windArrow.windStrengthIndicator.innerHTML = `Wind: ${(this.speed * 1000).toFixed(0)}%`;
-        }
-
         console.log(`🌬️ Nouvelle direction du vent:
         - Radians: ${angleRad.toFixed(3)}
         - Degrés: ${angleDeg.toFixed(1)}°
@@ -268,7 +268,7 @@ class _createClouds {
     }
 
     update() {
-        this.windArrow.updateFrame();
+        this.windArrow.updateFrame(this.speed);
 
         this.clouds.forEach(cloud => cloud.update(this.direction));
 
