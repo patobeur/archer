@@ -137,11 +137,14 @@ const _move = {
 
 	// --- Player Update Functions ---
 	updatePlayerMovement: function () {
-		const threshold = 20;
-		this.keys.z = this.move_touch.vector.y < -threshold;
-		this.keys.s = this.move_touch.vector.y > threshold;
-		this.keys.q = this.move_touch.vector.x < -threshold;
-		this.keys.d = this.move_touch.vector.x > threshold;
+		const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+		if (isTouchDevice) {
+			const threshold = 20;
+			this.keys.z = this.move_touch.vector.y < -threshold;
+			this.keys.s = this.move_touch.vector.y > threshold;
+			this.keys.q = this.move_touch.vector.x < -threshold;
+			this.keys.d = this.move_touch.vector.x > threshold;
+		}
 
 		if (this.keys.z || this.keys.s || this.keys.q || this.keys.d) {
 			const direction = new THREE.Vector3();
