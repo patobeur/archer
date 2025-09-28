@@ -1,0 +1,302 @@
+[
+  {
+    "name": "BigTreeWithLeaves",
+    "position": { "x": -105.5, "y": 0, "z": -83.1 },
+    "rotation": { "x": 0, "y": 1.2, "z": 0 },
+    "scale": { "x": 1.3, "y": 1.4, "z": 1.3 }
+  },
+  {
+    "name": "SmallTreeWithLeave",
+    "position": { "x": -98.2, "y": 0, "z": -75.4 },
+    "rotation": { "x": 0, "y": 2.5, "z": 0 },
+    "scale": { "x": 1.1, "y": 1.1, "z": 1.1 }
+  },
+  {
+    "name": "BigBush",
+    "position": { "x": -110.1, "y": 0, "z": -90.6 },
+    "rotation": { "x": 0, "y": 0.5, "z": 0 },
+    "scale": { "x": 1.6, "y": 1.5, "z": 1.6 }
+  },
+  {
+    "name": "SmallBush",
+    "position": { "x": -101.3, "y": 0, "z": -88.9 },
+    "rotation": { "x": 0, "y": 4.1, "z": 0 },
+    "scale": { "x": 1.2, "y": 1.3, "z": 1.2 }
+  },
+  {
+    "name": "TreeNoLeavesSmall",
+    "position": { "x": -89.7, "y": 0, "z": -70.2 },
+    "rotation": { "x": 0, "y": 3.3, "z": 0 },
+    "scale": { "x": 0.9, "y": 1.0, "z": 0.9 }
+  },
+  {
+    "name": "BigTreeWithLeaves",
+    "position": { "x": -125.0, "y": 0, "z": -65.8 },
+    "rotation": { "x": 0, "y": 5.0, "z": 0 },
+    "scale": { "x": 1.4, "y": 1.5, "z": 1.4 }
+  },
+  {
+    "name": "SmallBush",
+    "position": { "x": -115.4, "y": 0, "z": -78.1 },
+    "rotation": { "x": 0, "y": 1.8, "z": 0 },
+    "scale": { "x": 1.3, "y": 1.3, "z": 1.3 }
+  },
+  {
+    "name": "TreeNoLeavesBig",
+    "position": { "x": -95.9, "y": 0, "z": -95.3 },
+    "rotation": { "x": 0, "y": 0.1, "z": 0 },
+    "scale": { "x": 1.2, "y": 1.3, "z": 1.2 }
+  },
+  {
+    "name": "SmallTreeWithLeave",
+    "position": { "x": -130.6, "y": 0, "z": -92.7 },
+    "rotation": { "x": 0, "y": 2.9, "z": 0 },
+    "scale": { "x": 1.0, "y": 1.1, "z": 1.0 }
+  },
+  {
+    "name": "BigBush",
+    "position": { "x": -108.8, "y": 0, "z": -68.5 },
+    "rotation": { "x": 0, "y": 4.6, "z": 0 },
+    "scale": { "x": 1.5, "y": 1.6, "z": 1.5 }
+  },
+  {
+    "name": "BigTreeWithLeaves",
+    "position": { "x": 125.1, "y": 0, "z": -148.3 },
+    "rotation": { "x": 0, "y": 3.1, "z": 0 },
+    "scale": { "x": 1.3, "y": 1.3, "z": 1.3 }
+  },
+  {
+    "name": "SmallTreeWithLeave",
+    "position": { "x": 118.5, "y": 0, "z": -155.6 },
+    "rotation": { "x": 0, "y": 0.8, "z": 0 },
+    "scale": { "x": 1.1, "y": 1.0, "z": 1.1 }
+  },
+  {
+    "name": "BigBush",
+    "position": { "x": 130.2, "y": 0, "z": -160.1 },
+    "rotation": { "x": 0, "y": 5.4, "z": 0 },
+    "scale": { "x": 1.6, "y": 1.5, "z": 1.6 }
+  },
+  {
+    "name": "SmallBush",
+    "position": { "x": 122.7, "y": 0, "z": -141.9 },
+    "rotation": { "x": 0, "y": 2.0, "z": 0 },
+    "scale": { "x": 1.2, "y": 1.2, "z": 1.2 }
+  },
+  {
+    "name": "TreeNoLeavesSmall",
+    "position": { "x": 110.3, "y": 0, "z": -135.2 },
+    "rotation": { "x": 0, "y": 4.7, "z": 0 },
+    "scale": { "x": 0.9, "y": 1.0, "z": 0.9 }
+  },
+  {
+    "name": "BigTreeWithLeaves",
+    "position": { "x": 145.8, "y": 0, "z": -130.5 },
+    "rotation": { "x": 0, "y": 1.5, "z": 0 },
+    "scale": { "x": 1.4, "y": 1.4, "z": 1.4 }
+  },
+  {
+    "name": "SmallBush",
+    "position": { "x": 135.9, "y": 0, "z": -145.7 },
+    "rotation": { "x": 0, "y": 3.8, "z": 0 },
+    "scale": { "x": 1.3, "y": 1.4, "z": 1.3 }
+  },
+  {
+    "name": "TreeNoLeavesBig",
+    "position": { "x": 115.4, "y": 0, "z": -165.8 },
+    "rotation": { "x": 0, "y": 6.1, "z": 0 },
+    "scale": { "x": 1.2, "y": 1.2, "z": 1.2 }
+  },
+  {
+    "name": "SmallTreeWithLeave",
+    "position": { "x": 150.1, "y": 0, "z": -158.4 },
+    "rotation": { "x": 0, "y": 0.4, "z": 0 },
+    "scale": { "x": 1.0, "y": 1.1, "z": 1.0 }
+  },
+  {
+    "name": "BigBush",
+    "position": { "x": 128.6, "y": 0, "z": -133.3 },
+    "rotation": { "x": 0, "y": 2.2, "z": 0 },
+    "scale": { "x": 1.5, "y": 1.5, "z": 1.5 }
+  },
+  {
+    "name": "BigTreeWithLeaves",
+    "position": { "x": 55.4, "y": 0, "z": 103.8 },
+    "rotation": { "x": 0, "y": 4.9, "z": 0 },
+    "scale": { "x": 1.3, "y": 1.4, "z": 1.3 }
+  },
+  {
+    "name": "SmallTreeWithLeave",
+    "position": { "x": 48.1, "y": 0, "z": 96.2 },
+    "rotation": { "x": 0, "y": 1.7, "z": 0 },
+    "scale": { "x": 1.1, "y": 1.1, "z": 1.1 }
+  },
+  {
+    "name": "BigBush",
+    "position": { "x": 60.9, "y": 0, "z": 110.3 },
+    "rotation": { "x": 0, "y": 3.5, "z": 0 },
+    "scale": { "x": 1.6, "y": 1.6, "z": 1.6 }
+  },
+  {
+    "name": "SmallBush",
+    "position": { "x": 51.7, "y": 0, "z": 108.1 },
+    "rotation": { "x": 0, "y": 0.9, "z": 0 },
+    "scale": { "x": 1.2, "y": 1.3, "z": 1.2 }
+  },
+  {
+    "name": "TreeNoLeavesSmall",
+    "position": { "x": 39.3, "y": 0, "z": 90.5 },
+    "rotation": { "x": 0, "y": 5.8, "z": 0 },
+    "scale": { "x": 0.9, "y": 1.0, "z": 0.9 }
+  },
+  {
+    "name": "BigTreeWithLeaves",
+    "position": { "x": 75.6, "y": 0, "z": 85.7 },
+    "rotation": { "x": 0, "y": 2.4, "z": 0 },
+    "scale": { "x": 1.4, "y": 1.5, "z": 1.4 }
+  },
+  {
+    "name": "SmallBush",
+    "position": { "x": 65.2, "y": 0, "z": 98.4 },
+    "rotation": { "x": 0, "y": 4.1, "z": 0 },
+    "scale": { "x": 1.3, "y": 1.3, "z": 1.3 }
+  },
+  {
+    "name": "TreeNoLeavesBig",
+    "position": { "x": 45.8, "y": 0, "z": 115.9 },
+    "rotation": { "x": 0, "y": 1.3, "z": 0 },
+    "scale": { "x": 1.2, "y": 1.3, "z": 1.2 }
+  },
+  {
+    "name": "SmallTreeWithLeave",
+    "position": { "x": 80.3, "y": 0, "z": 108.2 },
+    "rotation": { "x": 0, "y": 3.0, "z": 0 },
+    "scale": { "x": 1.0, "y": 1.1, "z": 1.0 }
+  },
+  {
+    "name": "BigBush",
+    "position": { "x": 58.1, "y": 0, "z": 88.6 },
+    "rotation": { "x": 0, "y": 5.2, "z": 0 },
+    "scale": { "x": 1.5, "y": 1.6, "z": 1.5 }
+  },
+  {
+    "name": "BigTreeWithLeaves",
+    "position": { "x": -165.7, "y": 0, "z": 143.2 },
+    "rotation": { "x": 0, "y": 0.6, "z": 0 },
+    "scale": { "x": 1.3, "y": 1.3, "z": 1.3 }
+  },
+  {
+    "name": "SmallTreeWithLeave",
+    "position": { "x": -158.4, "y": 0, "z": 135.5 },
+    "rotation": { "x": 0, "y": 2.8, "z": 0 },
+    "scale": { "x": 1.1, "y": 1.0, "z": 1.1 }
+  },
+  {
+    "name": "BigBush",
+    "position": { "x": -170.3, "y": 0, "z": 150.8 },
+    "rotation": { "x": 0, "y": 4.5, "z": 0 },
+    "scale": { "x": 1.6, "y": 1.5, "z": 1.6 }
+  },
+  {
+    "name": "SmallBush",
+    "position": { "x": -161.9, "y": 0, "z": 148.1 },
+    "rotation": { "x": 0, "y": 1.2, "z": 0 },
+    "scale": { "x": 1.2, "y": 1.2, "z": 1.2 }
+  },
+  {
+    "name": "TreeNoLeavesSmall",
+    "position": { "x": -149.5, "y": 0, "z": 130.4 },
+    "rotation": { "x": 0, "y": 3.7, "z": 0 },
+    "scale": { "x": 0.9, "y": 1.0, "z": 0.9 }
+  },
+  {
+    "name": "BigTreeWithLeaves",
+    "position": { "x": -185.2, "y": 0, "z": 125.6 },
+    "rotation": { "x": 0, "y": 5.9, "z": 0 },
+    "scale": { "x": 1.4, "y": 1.4, "z": 1.4 }
+  },
+  {
+    "name": "SmallBush",
+    "position": { "x": -175.8, "y": 0, "z": 138.3 },
+    "rotation": { "x": 0, "y": 0.2, "z": 0 },
+    "scale": { "x": 1.3, "y": 1.4, "z": 1.3 }
+  },
+  {
+    "name": "TreeNoLeavesBig",
+    "position": { "x": -155.1, "y": 0, "z": 155.4 },
+    "rotation": { "x": 0, "y": 2.0, "z": 0 },
+    "scale": { "x": 1.2, "y": 1.2, "z": 1.2 }
+  },
+  {
+    "name": "SmallTreeWithLeave",
+    "position": { "x": -190.4, "y": 0, "z": 148.9 },
+    "rotation": { "x": 0, "y": 4.3, "z": 0 },
+    "scale": { "x": 1.0, "y": 1.1, "z": 1.0 }
+  },
+  {
+    "name": "BigBush",
+    "position": { "x": -168.7, "y": 0, "z": 128.1 },
+    "rotation": { "x": 0, "y": 6.0, "z": 0 },
+    "scale": { "x": 1.5, "y": 1.5, "z": 1.5 }
+  },
+  {
+    "name": "BigTreeWithLeaves",
+    "position": { "x": 185.9, "y": 0, "z": 23.5 },
+    "rotation": { "x": 0, "y": 1.9, "z": 0 },
+    "scale": { "x": 1.3, "y": 1.4, "z": 1.3 }
+  },
+  {
+    "name": "SmallTreeWithLeave",
+    "position": { "x": 178.6, "y": 0, "z": 15.8 },
+    "rotation": { "x": 0, "y": 3.2, "z": 0 },
+    "scale": { "x": 1.1, "y": 1.1, "z": 1.1 }
+  },
+  {
+    "name": "BigBush",
+    "position": { "x": 190.5, "y": 0, "z": 30.2 },
+    "rotation": { "x": 0, "y": 5.1, "z": 0 },
+    "scale": { "x": 1.6, "y": 1.6, "z": 1.6 }
+  },
+  {
+    "name": "SmallBush",
+    "position": { "x": 181.1, "y": 0, "z": 28.4 },
+    "rotation": { "x": 0, "y": 0.7, "z": 0 },
+    "scale": { "x": 1.2, "y": 1.3, "z": 1.2 }
+  },
+  {
+    "name": "TreeNoLeavesSmall",
+    "position": { "x": 169.8, "y": 0, "z": 10.7 },
+    "rotation": { "x": 0, "y": 2.6, "z": 0 },
+    "scale": { "x": 0.9, "y": 1.0, "z": 0.9 }
+  },
+  {
+    "name": "BigTreeWithLeaves",
+    "position": { "x": 205.4, "y": 0, "z": 5.9 },
+    "rotation": { "x": 0, "y": 4.8, "z": 0 },
+    "scale": { "x": 1.4, "y": 1.5, "z": 1.4 }
+  },
+  {
+    "name": "SmallBush",
+    "position": { "x": 195.7, "y": 0, "z": 18.6 },
+    "rotation": { "x": 0, "y": 1.1, "z": 0 },
+    "scale": { "x": 1.3, "y": 1.3, "z": 1.3 }
+  },
+  {
+    "name": "TreeNoLeavesBig",
+    "position": { "x": 175.3, "y": 0, "z": 35.1 },
+    "rotation": { "x": 0, "y": 3.4, "z": 0 },
+    "scale": { "x": 1.2, "y": 1.3, "z": 1.2 }
+  },
+  {
+    "name": "SmallTreeWithLeave",
+    "position": { "x": 210.8, "y": 0, "z": 28.7 },
+    "rotation": { "x": 0, "y": 5.6, "z": 0 },
+    "scale": { "x": 1.0, "y": 1.1, "z": 1.0 }
+  },
+  {
+    "name": "BigBush",
+    "position": { "x": 188.9, "y": 0, "z": 8.2 },
+    "rotation": { "x": 0, "y": 0.3, "z": 0 },
+    "scale": { "x": 1.5, "y": 1.6, "z": 1.5 }
+  }
+]
