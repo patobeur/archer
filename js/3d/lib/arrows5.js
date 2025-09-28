@@ -92,9 +92,11 @@ const _arrows = {
 	ToutesLesCible: [],
 	Font: undefined,
 	wind: new THREE.Vector3(0, 0, 0),
+    game: null,
 
-	init: function (_scene, _cibles, _score, gravity, Font, selectedBow) {
+	init: function (game, _scene, _cibles, _score, gravity, Font, selectedBow) {
 		console.log("[arrows5.js] _arrows.init() called");
+        this.game = game;
 		this.Font = Font;
 		this.bowModel = selectedBow;
 		this.arrowModel = _equipements.arrows[2];
@@ -212,6 +214,10 @@ const _arrows = {
 		_arrows.shootedArrows++;
 		_arrows._scene.scene.add(arrow);
 		new Audio("./assets/whoosh.mp3").play();
+
+        if (_arrows.game) {
+            _arrows.game.recenterCamera = true;
+        }
 	},
 
 	checkCollision: function (arrow, previousPosition) {
@@ -246,7 +252,7 @@ const _arrows = {
 			arrow.stopped = true;
 
 			// Ajouter des points au score
-			if (intersection.object.userData.points) {
+			if (intersection.object.userData.points && !this.game.isPlayerOutOfBounds) {
 				this._score.addToScore(intersection.object.userData.points);
 			}
 
