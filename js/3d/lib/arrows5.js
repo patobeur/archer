@@ -128,6 +128,7 @@ const _arrows = {
 
 		button.addEventListener("touchstart", (event) => {
 			event.preventDefault(); // Empêche le zoom ou autres actions par défaut
+			event.stopPropagation(); // Empêche le déclenchement de la visée
 			_arrows.shootArrow();
 		});
 
