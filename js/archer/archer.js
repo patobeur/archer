@@ -185,7 +185,7 @@ let game = {
         if (game.createClouds) {
             const windDirection = game.createClouds.getWindDirection();
             const windSpeed = game.createClouds.getWindSpeed();
-            _arrows.wind.copy(windDirection).multiplyScalar(windSpeed * 5); // Multiplier to make the wind noticeable
+            _arrows.wind.copy(windDirection).multiplyScalar(windSpeed); // Multiplier to make the wind noticeable
         }
 
         _arrows.checkArrows();

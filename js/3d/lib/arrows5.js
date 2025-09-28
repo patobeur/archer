@@ -29,7 +29,7 @@ const _equipements = {
 			name: "simple",
 			longueur: 2,
 			diametre: 0.045,
-			bonus: { power: 0.2, windResist: 0.002, gravityResist: 0.0002 },
+			bonus: { power: 0.2, windResist: 0.002, gravityResist: 0.0002, windImpactRatio: 0.5 },
 			color: 0xffff00,
 			userData: {
 				dt: 0.2, // Temps simulé par frame (~60 FPS)
@@ -42,7 +42,7 @@ const _equipements = {
 			name: "moyenne",
 			longueur: 2,
 			diametre: 0.05,
-			bonus: { power: 0.3, windResist: 0.003, gravityResist: 0.0003 },
+			bonus: { power: 0.3, windResist: 0.003, gravityResist: 0.0003, windImpactRatio: 0.4 },
 			color: 0xffff00,
 			userData: {
 				dt: 0.2, // Temps simulé par frame (~60 FPS)
@@ -55,7 +55,7 @@ const _equipements = {
 			name: "avancée",
 			longueur: 2,
 			diametre: 0.05,
-			bonus: { power: 1.5, windResist: 0.004, gravityResist: 0.2 },
+			bonus: { power: 1.5, windResist: 0.004, gravityResist: 0.2, windImpactRatio: 0.3 },
 			color: 0xff00ff,
 			userData: {
 				dt: 0.2, // Temps simulé par frame (~60 FPS)
@@ -190,6 +190,7 @@ const _arrows = {
 			velocity: initialVelocity,
 			stopped: false,
 			userData: _arrows.arrowModel.userData,
+			bonus: _arrows.arrowModel.bonus,
 		});
 
 		_arrows.shootedArrows++;
@@ -256,7 +257,7 @@ const _arrows = {
 					.clone()
 					.multiplyScalar(-friction);
 
-				let forceWind = _arrows.wind.clone();
+				let forceWind = _arrows.wind.clone().multiplyScalar(arrow.bonus.windImpactRatio);
 
 				let totalForce = forceGravity.add(forceFriction).add(forceWind);
 				let acceleration = totalForce.divideScalar(mass);
