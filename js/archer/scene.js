@@ -2,14 +2,14 @@ import * as THREE from 'three';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
 
 import { _soleil } from '../3d/lib/soleil.js';
-const _scene  = { 
+const _scene  = {
 	scene:undefined,
 	camera:undefined,
 	miniCamera:undefined,
 	renderer:undefined,
 	controls:undefined,
 	gravity: new THREE.Vector3(0, -0.02, 0),
-	init:function(){
+	init:function(container){
 		// Setup scene
 		this.scene = new THREE.Scene();
 		this.scene.background = new THREE.Color(0x11438f);
@@ -28,12 +28,12 @@ const _scene  = {
 		this.camera.name = 'two'
 
 		// Setup renderer
-		
+
 		this.renderer = new THREE.WebGLRenderer({
 			antialias: true,
 			alpha: true
 		});
-	
+
 
 
 		// Configuration du rendu
@@ -49,13 +49,13 @@ const _scene  = {
 		// this.renderer.setClearColor(0x000010, 1.0);
 		this.renderer.shadowMap.enabled = true
 
-		document.body.appendChild(this.renderer.domElement);
+		container.appendChild(this.renderer.domElement);
 
 		// Controls
 		const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 		if (!isTouchDevice) {
-			this.controls = new PointerLockControls(this.camera, document.body);
-			document.addEventListener('click', () => this.controls.lock());
+			this.controls = new PointerLockControls(this.camera, container);
+			container.addEventListener('click', () => this.controls.lock());
 			this.scene.add(this.controls.getObject());
 		}
 
@@ -73,7 +73,7 @@ const _scene  = {
 		light.castShadow = true
 		light.receiveShadow = false;
 		this.scene.add(light);
-		
+
 		var ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
 		this.scene.add(ambientLight);
 
@@ -86,7 +86,7 @@ const _scene  = {
 		ground.castShadow = true
 		ground.receiveShadow = true;
 		this.scene.add(ground);
-		
+
 		this.soleil = _soleil;
 
 		this.soleil.init(_scene)

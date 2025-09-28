@@ -30,22 +30,14 @@ let game = {
     init:function(){
         console.log('[archer.js] game.init() called');
 
-        this.loadingScreen = _front.createDiv({
-            attributes: {
-                id: 'loadingScreen',
-                innerHTML: 'Loading...'
-            },
-            style: {
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                color: 'white',
-                fontSize: '24px',
-                fontFamily: 'Arial, sans-serif'
-            }
-        });
-        document.body.appendChild(this.loadingScreen);
+        const startButton = document.getElementById('startButton');
+        if (!startButton) {
+            console.error('Start button not found!');
+            return;
+        }
+
+        startButton.disabled = true;
+        startButton.innerHTML = 'Loading...';
 
         console.log('loading Font');
         const loader = new FontLoader();
@@ -54,43 +46,26 @@ let game = {
             (font) => {
                 this.Font = font;
                 console.log('Font loading ok');
-                this.next1();
+
+                startButton.disabled = false;
+                startButton.innerHTML = 'Start';
+                startButton.addEventListener('click', () => {
+                    this.showBowSelection();
+                }, { once: true });
             },
             undefined,
             (error) => {
                 console.error('An error occurred while loading the font:', error);
+                startButton.innerHTML = 'Error';
             }
         );
     },
-    next1: function() {
-        this.loadingScreen.innerHTML = '';
-
-        const startButton = _front.createDiv({
-            tag: 'button',
-            attributes: {
-                id: 'startButton',
-                innerHTML: 'Start'
-            },
-            style: {
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                padding: '10px 20px',
-                fontSize: '20px',
-                cursor: 'pointer'
-            }
-        });
-
-        document.body.appendChild(startButton);
-
-        startButton.addEventListener('click', () => {
-            document.body.removeChild(startButton);
-            document.body.removeChild(this.loadingScreen);
-            this.showBowSelection();
-        });
-    },
     showBowSelection: function() {
+        const navbar = document.getElementById('navbar');
+        if(navbar) {
+            navbar.style.display = 'none';
+        }
+
         const bowSelectionContainer = _front.createDiv({
             attributes: { id: 'bowSelection' },
             style: {
@@ -98,7 +73,11 @@ let game = {
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                textAlign: 'center'
+                textAlign: 'center',
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                padding: '20px',
+                borderRadius: '10px',
+                zIndex: '20'
             }
         });
         document.body.appendChild(bowSelectionContainer);
@@ -120,7 +99,8 @@ let game = {
                 style: {
                     margin: '10px',
                     padding: '10px 20px',
-                    fontSize: '16px'
+                    fontSize: '16px',
+                    cursor: 'pointer'
                 }
             });
 
@@ -134,6 +114,12 @@ let game = {
         });
     },
     next2:function(){
+        const sceneContainer = document.getElementById('scene-container');
+        if (!sceneContainer) {
+            console.error('Scene container not found!');
+            return;
+        }
+
         _board.init(
             'Archer',
             {scoreBoard:true,bestScoreBoard:true},
@@ -150,7 +136,7 @@ let game = {
             '@keyframes fade-up{from{opacity:1;transform:translate(-50%,-50%) scale(1);}to{opacity:0;transform:translate(-50%,-150%) scale(1.5);}}'
         )
         _score.init()
-        _scene.init()
+        _scene.init(sceneContainer)
         _move.init(_scene)
         _cibles.init(_scene)
 
@@ -185,7 +171,7 @@ let game = {
         this.animate();
 
         let mire = _front.createDiv({
-            style:{backgroundColor:"black",position:'absolute',top:"calc( 50% - 1px)",left:"calc( 50% - 1px)",width:"4px",height:"4px"}
+            style:{backgroundColor:"black",position:'absolute',top:"calc( 50% - 1px)",left:"calc( 50% - 1px)",width:"4px",height:"4px", zIndex: "30"}
         })
         document.body.append(mire)
     },

@@ -14,10 +14,35 @@
 				overflow: hidden;
 				width: 100%;
 				height: 100%;
+                font-family: Arial, sans-serif;
 			}
 			canvas {
 				display: block;
 			}
+            #navbar {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.7);
+                padding: 10px;
+                box-sizing: border-box;
+                z-index: 10;
+                display: flex;
+                justify-content: flex-end;
+            }
+            #startButton {
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+            }
+            #scene-container {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
 		</style>
 		<script type="importmap">
 			{
@@ -29,6 +54,10 @@
 		</script>
 	</head>
 	<body>
+        <div id="navbar">
+            <button id="startButton">Start</button>
+        </div>
+        <div id="scene-container"></div>
 		<script type="module" src="./js/archer/archer.js"></script>
 	</body>
 </html>
