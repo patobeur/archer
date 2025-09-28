@@ -24,15 +24,6 @@ const _labels = {
 };
 
 const _equipements = {
-	bows: {
-		0: { name: "arc classique enfant", power: 1, speed: 5, length: 1.3 },
-		1: { name: "arc classique moyen", power: 1.5, speed: 7, length: 1.5 },
-		2: { name: "arc classique adulte", power: 1.8, speed: 8, length: 1.7 },
-		3: { name: "arc long enfant", power: 1.3, speed: 6, length: 1.6 },
-		4: { name: "arc long moyen", power: 1.8, speed: 9, length: 1.8 },
-		5: { name: "arc long adulte", power: 2, speed: 10, length: 2.0 },
-	},
-
 	arrows: {
 		0: {
 			name: "simple",
@@ -86,10 +77,10 @@ const _arrows = {
 	ToutesLesCible: [],
 	Font: undefined,
 
-	init: function (_scene, _cibles, _score, gravity, Font) {
+	init: function (_scene, _cibles, _score, gravity, Font, selectedBow) {
 		console.log("[arrows5.js] _arrows.init() called");
 		this.Font = Font;
-		this.bowModel = _equipements.bows[2];
+		this.bowModel = selectedBow;
 		this.arrowModel = _equipements.arrows[2];
 		this._cibles = _cibles;
 		this._cibles.cible.children.forEach((element) => {
@@ -171,11 +162,12 @@ const _arrows = {
 		arrowPosition.addScaledVector(forward, 1.5);
 		arrow.position.copy(arrowPosition);
 
-		let baseSpeed = _arrows.bowModel.speed;
+		let baseSpeed = 5; // Base speed for all bows
+        let bowPower = _arrows.bowModel.power;
 		let arrowBonus = _arrows.arrowModel.bonus.power;
 		let initialVelocity = forward
 			.clone()
-			.multiplyScalar(baseSpeed + arrowBonus);
+			.multiplyScalar((baseSpeed * bowPower) + arrowBonus);
 
 		arrow.quaternion.setFromUnitVectors(
 			new THREE.Vector3(0, 1, 0),

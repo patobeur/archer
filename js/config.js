@@ -5,6 +5,17 @@ const config = {
 	// 'forest' pour charger la forêt
 	// 'default' pour utiliser le `population_mode`
 	environment: "forest",
+	bows: {
+        léger: {
+            power: 1.2
+        },
+        moyen: {
+            power: 1.5
+        },
+        fort: {
+            power: 2
+        }
+    }
 };
 
 export { config };

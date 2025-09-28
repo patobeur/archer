@@ -26,8 +26,27 @@ let game = {
     delta: 0,
     createClouds:undefined,
     Font:undefined,
+    selectedBow: undefined,
     init:function(){
         console.log('[archer.js] game.init() called');
+
+        this.loadingScreen = _front.createDiv({
+            attributes: {
+                id: 'loadingScreen',
+                innerHTML: 'Loading...'
+            },
+            style: {
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                color: 'white',
+                fontSize: '24px',
+                fontFamily: 'Arial, sans-serif'
+            }
+        });
+        document.body.appendChild(this.loadingScreen);
+
         console.log('loading Font');
         const loader = new FontLoader();
         loader.load(
@@ -43,8 +62,76 @@ let game = {
             }
         );
     },
-    next1:function(){
-        this.next2();
+    next1: function() {
+        this.loadingScreen.innerHTML = '';
+
+        const startButton = _front.createDiv({
+            tag: 'button',
+            attributes: {
+                id: 'startButton',
+                innerHTML: 'Start'
+            },
+            style: {
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                padding: '10px 20px',
+                fontSize: '20px',
+                cursor: 'pointer'
+            }
+        });
+
+        document.body.appendChild(startButton);
+
+        startButton.addEventListener('click', () => {
+            document.body.removeChild(startButton);
+            document.body.removeChild(this.loadingScreen);
+            this.showBowSelection();
+        });
+    },
+    showBowSelection: function() {
+        const bowSelectionContainer = _front.createDiv({
+            attributes: { id: 'bowSelection' },
+            style: {
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                textAlign: 'center'
+            }
+        });
+        document.body.appendChild(bowSelectionContainer);
+
+        const title = _front.createDiv({
+            tag: 'h2',
+            attributes: { innerHTML: 'Choose Your Bow' },
+            style: { color: 'white' }
+        });
+        bowSelectionContainer.appendChild(title);
+
+        Object.keys(config.bows).forEach(bowKey => {
+            const bow = config.bows[bowKey];
+            const bowButton = _front.createDiv({
+                tag: 'button',
+                attributes: {
+                    innerHTML: `${bowKey.charAt(0).toUpperCase() + bowKey.slice(1)} (Power: ${bow.power})`
+                },
+                style: {
+                    margin: '10px',
+                    padding: '10px 20px',
+                    fontSize: '16px'
+                }
+            });
+
+            bowButton.addEventListener('click', () => {
+                this.selectedBow = bow;
+                document.body.removeChild(bowSelectionContainer);
+                this.next2();
+            });
+
+            bowSelectionContainer.appendChild(bowButton);
+        });
     },
     next2:function(){
         _board.init(
@@ -73,7 +160,7 @@ let game = {
             _populateNature.init(_scene.scene);
         }
 
-        _arrows.init(_scene,_cibles,_score,this.gravity,this.Font)
+        _arrows.init(_scene,_cibles,_score,this.gravity,this.Font, this.selectedBow)
 
         this.stats.dom.style.top = 'initial'
         this.stats.dom.style.bottom = '0'
