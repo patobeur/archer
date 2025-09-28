@@ -55,6 +55,7 @@ const _scene  = {
 		const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 		if (!isTouchDevice) {
 			this.controls = new PointerLockControls(this.camera, container);
+			this.controls.pointerSpeed = 0.5;
 			container.addEventListener('click', () => this.controls.lock());
 			this.scene.add(this.controls.getObject());
 		}

@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 const _move = {
 	moveSpeed: 0.1,
-	lookSpeed: 0.004, // Sensibilité de la visée
+	lookSpeed: 0.002, // Sensibilité de la visée
 	keys: { z: false, q: false, s: false, d: false },
 	_scene: undefined,
 
