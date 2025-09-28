@@ -27,6 +27,10 @@ let game = {
     createClouds:undefined,
     Font:undefined,
     selectedBow: undefined,
+    isPlayerOutOfBounds: false,
+    warningMessage: null,
+    recenterCamera: false,
+
     init:function(){
         console.log('[archer.js] game.init() called');
 
@@ -146,7 +150,7 @@ let game = {
             _populateNature.init(_scene.scene);
         }
 
-        _arrows.init(_scene,_cibles,_score,this.gravity,this.Font, this.selectedBow)
+        _arrows.init(this, _scene,_cibles,_score,this.gravity,this.Font, this.selectedBow)
 
         this.stats.dom.style.top = 'initial'
         this.stats.dom.style.bottom = '0'
@@ -174,12 +178,72 @@ let game = {
             style:{backgroundColor:"black",position:'absolute',top:"calc( 50% - 1px)",left:"calc( 50% - 1px)",width:"4px",height:"4px", zIndex: "30"}
         })
         document.body.append(mire)
+
+        this.warningMessage = _front.createDiv({
+            attributes: {
+                innerHTML: 'You are out of bounds! Your shots will not score.'
+            },
+            style: {
+                position: 'absolute',
+                bottom: '20px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                backgroundColor: 'rgba(255, 0, 0, 0.7)',
+                color: 'white',
+                padding: '10px',
+                borderRadius: '5px',
+                display: 'none', // Initially hidden
+                zIndex: '30'
+            }
+        });
+        document.body.appendChild(this.warningMessage);
+    },
+    checkPlayerPosition: function() {
+        const playerPosition = _scene.camera.position;
+        const zone = _scene.playerAllowedZone;
+        const distance = Math.sqrt(
+            Math.pow(playerPosition.x - zone.position.x, 2) +
+            Math.pow(playerPosition.z - zone.position.z, 2)
+        );
+
+        if (distance > zone.radius) {
+            this.isPlayerOutOfBounds = true;
+            this.warningMessage.style.display = 'block';
+        } else {
+            this.isPlayerOutOfBounds = false;
+            this.warningMessage.style.display = 'none';
+        }
+    },
+    handleCameraRecenter: function() {
+        if (!this.recenterCamera) return;
+
+        // Stop recentering if the user is actively looking
+        if (_move.look_touch.id !== -1 && (_move.look_touch.vector.x !== 0 || _move.look_touch.vector.y !== 0)) {
+            this.recenterCamera = false;
+            return;
+        }
+
+        const euler = new THREE.Euler(0, 0, 0, 'YXZ');
+        euler.setFromQuaternion(_scene.camera.quaternion);
+
+        // Smoothly interpolate the vertical rotation (euler.x) towards 0
+        euler.x = THREE.MathUtils.lerp(euler.x, 0, 0.1);
+
+        // If the rotation is very close to 0, stop recentering
+        if (Math.abs(euler.x) < 0.001) {
+            euler.x = 0;
+            this.recenterCamera = false;
+        }
+
+        _scene.camera.quaternion.setFromEuler(euler);
     },
     animate:function(){
         game.delta = game.clock.getDelta();
         requestAnimationFrame(game.animate);
         _move.updatePlayerMovement();
         _move.updateCameraRotation();
+        game.checkPlayerPosition();
+        game.handleCameraRecenter();
 
         // Update wind for arrows
         if (game.createClouds) {

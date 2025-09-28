@@ -8,6 +8,10 @@ const _scene  = {
 	miniCamera:undefined,
 	renderer:undefined,
 	controls:undefined,
+    playerAllowedZone: {
+        radius: 10,
+        position: new THREE.Vector3(0, 0, 40)
+    },
 	gravity: new THREE.Vector3(0, -0.02, 0),
 	init:function(container){
 		// Setup scene
@@ -20,7 +24,7 @@ const _scene  = {
 
 		// Setup camera
 		this.camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
-		this.camera.position.set(0, 1.8, 40);
+		this.camera.position.set(this.playerAllowedZone.position.x, 1.8, this.playerAllowedZone.position.z);
 		this.camera.name = 'one'
 
 		this.miniCamera = new THREE.PerspectiveCamera(75, 1, 0.1, 100);
@@ -86,6 +90,15 @@ const _scene  = {
 		ground.castShadow = true
 		ground.receiveShadow = true;
 		this.scene.add(ground);
+
+        const circleGeometry = new THREE.CircleGeometry(this.playerAllowedZone.radius, 32);
+        const circleMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, side: THREE.DoubleSide, transparent: true, opacity: 0.5 });
+        const circle = new THREE.Mesh(circleGeometry, circleMaterial);
+        circle.rotation.x = -Math.PI / 2;
+        circle.position.y = 0.01; // Slightly above the ground to avoid z-fighting
+        circle.position.x = this.playerAllowedZone.position.x;
+        circle.position.z = this.playerAllowedZone.position.z;
+        this.scene.add(circle);
 
 		this.soleil = _soleil;
 
