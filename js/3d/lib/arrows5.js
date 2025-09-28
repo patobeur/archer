@@ -264,4 +264,32 @@ const _arrows = {
 				arrow.mesh.position.add(arrow.velocity.clone().multiplyScalar(dt));
 
 				// **Tourner la flèche pour suivre la trajectoire**
-				if (arrow.velocity.length() >.
+				if (arrow.velocity.length() > 0) {
+					arrow.mesh.quaternion.setFromUnitVectors(
+						new THREE.Vector3(0, 1, 0),
+						arrow.velocity.clone().normalize()
+					);
+				}
+
+				this.checkCollision(arrow, previousPosition);
+			}
+		});
+	},
+
+	checkGroundCollision: function (arrow) {
+		if (arrow.stopped) return;
+		// Vérifier si la flèche touche le sol (z = 0)
+		if (arrow.mesh.position.y <= 0) {
+			arrow.mesh.position.y = 0;
+			arrow.stopped = true;
+		}
+	},
+	resetArrows: function () {
+		_arrows.arrows.forEach((arrow) =>
+			_arrows._scene.scene.remove(arrow.mesh)
+		);
+		_arrows.arrows = [];
+	},
+};
+
+export { _arrows };
