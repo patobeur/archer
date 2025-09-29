@@ -165,6 +165,43 @@ p {
     color: #666;
 }
 
+/* Bow Selection Area Styles */
+#bow-selection-area {
+    margin-top: 30px;
+}
+
+#bow-selection-area h2 {
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.bow-selection-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 2px solid transparent;
+}
+
+.bow-selection-card:hover {
+    border-color: #f4b400;
+    transform: translateY(-5px);
+}
+
+#backButton {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+#backButton:hover {
+    background-color: #5a6268;
+}
+
 /* Footer */
 footer {
     background: #333;
