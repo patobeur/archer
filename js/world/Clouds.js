@@ -14,7 +14,7 @@ class WindArrow {
             attributes: { id: 'windStrengthIndicator' },
             style: {
                 position: 'absolute',
-                top: '10px',
+                top: '110px',
                 left: '50%',
                 transform: 'translateX(-50%)',
                 color: 'white',

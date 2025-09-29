@@ -8,10 +8,18 @@ const InGameMenu = {
         const menuContainer = document.createElement('div');
         menuContainer.id = 'in-game-menu';
         Object.assign(menuContainer.style, {
-            position: 'absolute',
-            top: '10px',
-            right: '10px',
-            zIndex: '1000'
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '100%',
+            padding: '10px',
+            backgroundColor: 'rgba(25, 25, 25, 0.5)',
+            backdropFilter: 'blur(8px)',
+            webkitBackdropFilter: 'blur(8px)',
+            zIndex: '1000',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            boxSizing: 'border-box'
         });
 
         const exitButton = this.createButton('Exit', () => {
@@ -27,7 +35,7 @@ const InGameMenu = {
         button.textContent = text;
         Object.assign(button.style, {
             color: 'white',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            backgroundColor: 'transparent',
             border: '1px solid white',
             padding: '8px 15px',
             cursor: 'pointer',
@@ -35,7 +43,7 @@ const InGameMenu = {
             fontSize: '14px'
         });
         button.addEventListener('click', (event) => {
-            event.stopPropagation(); // Prevent click from triggering game actions like shooting
+            event.stopPropagation();
             onClick();
         });
         return button;
