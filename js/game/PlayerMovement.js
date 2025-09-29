@@ -14,15 +14,20 @@ const _move = {
 
     // --- Mouse Controls State ---
     isMouseDown: false,
+    isDragging: false,
     lastMouseX: 0,
     lastMouseY: 0,
+    startX: 0,
+    startY: 0,
+    _arrows: null,
 
     // --- Joystick UI ---
     joystick_move: { base: null, handle: null },
 
-    init: function (app, _scene) {
+    init: function (app, _scene, _arrows) {
         this.app = app;
         this._scene = _scene;
+        this._arrows = _arrows;
         const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
         if (isTouchDevice) {
             this.createJoystick();
@@ -104,12 +109,19 @@ const _move = {
 
         document.addEventListener('mousedown', (e) => {
             this.isMouseDown = true;
+            this.isDragging = false;
+            this.startX = e.clientX;
+            this.startY = e.clientY;
             this.lastMouseX = e.clientX;
             this.lastMouseY = e.clientY;
         });
 
         document.addEventListener('mouseup', () => {
+            if (!this.isDragging) {
+                this._arrows.shootArrow();
+            }
             this.isMouseDown = false;
+            this.isDragging = false;
         });
 
         document.addEventListener('mousemove', (e) => {
@@ -117,17 +129,25 @@ const _move = {
 
             const deltaX = e.clientX - this.lastMouseX;
             const deltaY = e.clientY - this.lastMouseY;
-            this.lastMouseX = e.clientX;
-            this.lastMouseY = e.clientY;
+            const dragThreshold = 5;
 
-            const euler = new THREE.Euler(0, 0, 0, 'YXZ');
-            euler.setFromQuaternion(this._scene.camera.quaternion);
+            if (Math.abs(deltaX) > dragThreshold || Math.abs(deltaY) > dragThreshold) {
+                this.isDragging = true;
+            }
 
-            euler.y -= deltaX * this.lookSpeed;
-            euler.x -= deltaY * this.lookSpeed;
-            euler.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.x));
+            if (this.isDragging) {
+                this.lastMouseX = e.clientX;
+                this.lastMouseY = e.clientY;
 
-            this._scene.camera.quaternion.setFromEuler(euler);
+                const euler = new THREE.Euler(0, 0, 0, 'YXZ');
+                euler.setFromQuaternion(this._scene.camera.quaternion);
+
+                euler.y -= deltaX * this.lookSpeed;
+                euler.x -= deltaY * this.lookSpeed;
+                euler.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.x));
+
+                this._scene.camera.quaternion.setFromEuler(euler);
+            }
         });
 
         document.addEventListener("touchstart", (e) => {

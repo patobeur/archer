@@ -62,7 +62,6 @@ const App = {
         );
         _score.init();
         _scene.init(sceneContainer);
-        _move.init(this, _scene);
         _cibles.init(_scene);
 
         if (config.environment === 'forest') {
@@ -72,6 +71,7 @@ const App = {
         }
 
         _arrows.init(this, _scene, _cibles, _score, this.gravity, this.Font, this.selectedBow);
+        _move.init(this, _scene, _arrows);
         _createStars(_scene.scene, 2000, 800);
         this.createClouds = new _createClouds(_scene.scene, _scene.camera);
 

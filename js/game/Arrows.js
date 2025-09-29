@@ -114,14 +114,6 @@ const _arrows = {
 
 		if (isTouchDevice) {
 			this.createShootButton();
-		} else {
-			// For desktop, listen for clicks on the scene container to shoot.
-			const sceneContainer = document.getElementById('scene-container');
-			sceneContainer.addEventListener("click", () => {
-				if (this._scene.controls.isLocked) {
-					this.shootArrow();
-				}
-			});
 		}
 	},
 
