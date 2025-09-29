@@ -58,6 +58,7 @@ const App = {
             console.error('Scene container not found!');
             return;
         }
+        sceneContainer.style.display = 'block';
 
         _board.init(
             'Archer',

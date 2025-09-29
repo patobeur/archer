@@ -30,6 +30,15 @@ const _uiManager = {
 			navbar.style.display = "none";
 		}
 
+		const contentWrapper = document.getElementById("content-wrapper");
+		if (contentWrapper) {
+			contentWrapper.style.display = "none";
+		}
+		const footer = document.querySelector("footer");
+		if (footer) {
+			footer.style.display = "none";
+		}
+
 		const bowSelectionContainer = _front.createDiv({
 			attributes: { id: "bowSelection" },
 			style: {
