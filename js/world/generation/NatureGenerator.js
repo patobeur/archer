@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
-import { config } from '../config.js';
-import { _proceduralGenerator } from './procedural_generator.js';
+import { config } from '../../config/gameConfig.js';
+import { _proceduralGenerator } from './ProceduralGenerator.js';
 
 const _populateNature = {
     init: async function(scene) {
