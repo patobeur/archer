@@ -27,15 +27,15 @@ canvas {
 
 
 /* Overrides for when the landing page is active */
-.landing-page-active body, .landing-page-active html {
+body.landing-page-active {
     overflow: auto; /* Allow scrolling on landing page */
 }
 
-.landing-page-active #content-wrapper {
+body.landing-page-active #content-wrapper {
     display: block; /* Show landing page */
 }
 
-.landing-page-active #scene-container {
+body.landing-page-active #scene-container {
     display: none; /* Hide game */
 }
 
