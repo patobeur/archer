@@ -117,7 +117,7 @@ const _move = {
         });
 
         document.addEventListener('mouseup', () => {
-            if (!this.isDragging) {
+            if (this.isMouseDown && !this.isDragging) {
                 this._arrows.shootArrow();
             }
             this.isMouseDown = false;
@@ -129,9 +129,10 @@ const _move = {
 
             const deltaX = e.clientX - this.lastMouseX;
             const deltaY = e.clientY - this.lastMouseY;
-            const dragThreshold = 5;
 
-            if (Math.abs(deltaX) > dragThreshold || Math.abs(deltaY) > dragThreshold) {
+            // Définir un seuil pour considérer le mouvement comme un "glisser"
+            const dragThreshold = 5;
+            if (Math.abs(e.clientX - this.startX) > dragThreshold || Math.abs(e.clientY - this.startY) > dragThreshold) {
                 this.isDragging = true;
             }
 
@@ -224,23 +225,36 @@ const _move = {
 
     updatePlayerMovement: function () {
         const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        let moveForward = false;
+        let moveBackward = false;
+        let moveLeft = false;
+        let moveRight = false;
+
         if (isTouchDevice) {
             const threshold = 20;
-            this.keys.z = this.move_touch.vector.y < -threshold;
-            this.keys.s = this.move_touch.vector.y > threshold;
-            this.keys.q = this.move_touch.vector.x < -threshold;
-            this.keys.d = this.move_touch.vector.x > threshold;
+            moveForward = this.move_touch.vector.y < -threshold;
+            moveBackward = this.move_touch.vector.y > threshold;
+            moveLeft = this.move_touch.vector.x < -threshold;
+            moveRight = this.move_touch.vector.x > threshold;
+        } else {
+            moveForward = this.keys.z;
+            moveBackward = this.keys.s;
+            moveLeft = this.keys.q;
+            moveRight = this.keys.d;
         }
 
-        if (this.keys.z || this.keys.s || this.keys.q || this.keys.d) {
+        if (moveForward || moveBackward || moveLeft || moveRight) {
             const direction = new THREE.Vector3();
             this._scene.camera.getWorldDirection(direction);
-            const right = new THREE.Vector3().crossVectors(this._scene.camera.up, direction).normalize();
+            direction.y = 0;
+            direction.normalize();
 
-            if (this.keys.z) this._scene.camera.position.addScaledVector(direction, this.moveSpeed);
-            if (this.keys.s) this._scene.camera.position.addScaledVector(direction, -this.moveSpeed);
-            if (this.keys.q) this._scene.camera.position.addScaledVector(right, this.moveSpeed);
-            if (this.keys.d) this._scene.camera.position.addScaledVector(right, -this.moveSpeed);
+            const right = new THREE.Vector3().crossVectors(direction, this._scene.camera.up).normalize();
+
+            if (moveForward) this._scene.camera.position.addScaledVector(direction, this.moveSpeed);
+            if (moveBackward) this._scene.camera.position.addScaledVector(direction, -this.moveSpeed);
+            if (moveLeft) this._scene.camera.position.addScaledVector(right, -this.moveSpeed);
+            if (moveRight) this._scene.camera.position.addScaledVector(right, this.moveSpeed);
         }
     },
 
