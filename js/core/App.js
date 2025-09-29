@@ -15,6 +15,7 @@ import { config } from '../config/gameConfig.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { _scene } from './Scene.js';
 import { LandingPage } from '../ui/LandingPage.js';
+import { InGameMenu } from '../ui/InGameMenu.js';
 
 const App = {
     gravity: new THREE.Vector3(0, -0.1, 0),
@@ -56,8 +57,8 @@ const App = {
 
         _board.init(
             'Archer',
-            { scoreBoard: true, bestScoreBoard: true },
-            '*{margin:0;padding:0;box-sizing: border-box;}body{background-color: rgb(190, 190, 190);}.container{width:100%;height:100%;position:absolute;overflow:hidden;z-index:2;margin:0;padding:0;box-sizing:border-box;}.top-bar{display:flex;justify-content:space-between;padding:10px;background-color:rgba(0,0,0,0.5);color:white;width:100%;position:absolute;top:0;left:0;z-index:10;}.score,.bestscore{font-size:16px;font-weight:bold;background-color:rgba(1, 12, 21, 0.75);color:rgb(169, 231, 255);padding:5px;border-radius:9px;}@media (max-width: 600px) {.top-bar{flex-direction:column;align-items:center;}.score,.bestscore{margin-bottom:5px;}}.points-animation{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#ffcc00;font-size:24px;font-weight:bold;animation:fade-up 2s ease-out forwards;z-index:20;text-shadow:1px 1px 2px black;}@keyframes fade-up{from{opacity:1;transform:translate(-50%,-50%) scale(1);}to{opacity:0;transform:translate(-50%,-150%) scale(1.5);}}'
+            { scoreBoard: false, bestScoreBoard: false },
+            '.points-animation{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#ffcc00;font-size:24px;font-weight:bold;animation:fade-up 2s ease-out forwards;z-index:20;text-shadow:1px 1px 2px black;}@keyframes fade-up{from{opacity:1;transform:translate(-50%,-50%) scale(1);}to{opacity:0;transform:translate(-50%,-150%) scale(1.5);}}'
         );
         _score.init();
         _scene.init(sceneContainer);
@@ -86,6 +87,7 @@ const App = {
 
         _uiManager.createCrosshair();
         _uiManager.createWarningMessage();
+        InGameMenu.init(this);
 
         _game.init(this);
         _game.start();

@@ -52,9 +52,9 @@ const _move = {
     handleCameraRecenter: function() {
         if (!this.app.recenterCamera) return;
 
-        if (this.look_touch.id !== -1 && (this.look_touch.vector.x !== 0 || this.look_touch.vector.y !== 0)) {
-            this.app.recenterCamera = false;
-            return;
+        // On desktop, unlock controls if they are locked to prevent aiming.
+        if (this._scene.controls && this._scene.controls.isLocked) {
+            this._scene.controls.unlock();
         }
 
         const euler = new THREE.Euler(0, 0, 0, 'YXZ');
@@ -197,7 +197,7 @@ const _move = {
     },
 
     updateCameraRotation: function () {
-        if (this.look_touch.id === -1 || (this.look_touch.vector.x === 0 && this.look_touch.vector.y === 0)) return;
+        if (this.app.recenterCamera || this.look_touch.id === -1 || (this.look_touch.vector.x === 0 && this.look_touch.vector.y === 0)) return;
 
         const euler = new THREE.Euler(0, 0, 0, 'YXZ');
         euler.setFromQuaternion(this._scene.camera.quaternion);
