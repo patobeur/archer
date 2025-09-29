@@ -25,10 +25,7 @@ const _uiManager = {
 	},
 
 	showBowSelection: function () {
-		const contentWrapper = document.getElementById("content-wrapper");
-		if (contentWrapper) {
-			contentWrapper.style.display = "none";
-		}
+		// No longer need to manually hide the content, the class toggle will handle it.
 
 		const bowSelectionContainer = _front.createDiv({
 			attributes: { id: "bowSelection" },
@@ -73,7 +70,8 @@ const _uiManager = {
 			bowButton.addEventListener("click", () => {
 				this.app.selectedBow = bow;
 				document.body.removeChild(bowSelectionContainer);
-				this.app.start(); // Corrected from next2() to start()
+				document.body.classList.remove('landing-page-active');
+				this.app.start();
 			});
 
 			bowSelectionContainer.appendChild(bowButton);
