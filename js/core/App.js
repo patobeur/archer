@@ -14,6 +14,7 @@ import { _populateForest } from '../world/generation/ForestGenerator.js';
 import { config } from '../config/gameConfig.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { _scene } from './Scene.js';
+import { LandingPage } from '../ui/LandingPage.js';
 
 const App = {
     gravity: new THREE.Vector3(0, -0.1, 0),
@@ -26,15 +27,7 @@ const App = {
     init: function () {
         console.log('[App.js] App.init() called');
         _uiManager.init(this);
-
-        const startButton = document.getElementById('startButton');
-        if (!startButton) {
-            console.error('Start button not found!');
-            return;
-        }
-
-        startButton.disabled = true;
-        startButton.innerHTML = 'Loading...';
+        LandingPage.init(this);
 
         const loader = new FontLoader();
         loader.load(
@@ -42,12 +35,13 @@ const App = {
             (font) => {
                 this.Font = font;
                 console.log('Font loading ok');
-                _uiManager.enableStartButton();
+                LandingPage.enableStartButton();
             },
             undefined,
             (error) => {
                 console.error('An error occurred while loading the font:', error);
-                startButton.innerHTML = 'Error';
+                const startButton = document.getElementById('startButton');
+                if(startButton) startButton.innerHTML = 'Error';
             }
         );
     },
@@ -58,6 +52,7 @@ const App = {
             console.error('Scene container not found!');
             return;
         }
+        sceneContainer.style.display = 'block';
 
         _board.init(
             'Archer',

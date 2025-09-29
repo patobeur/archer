@@ -6,44 +6,7 @@
 			name="viewport"
 			content="width=device-width, initial-scale=1.0, user-scalable=no" />
 		<title>Archer game 🏹</title>
-		<style>
-			body,
-			html {
-				margin: 0;
-				padding: 0;
-				overflow: hidden;
-				width: 100%;
-				height: 100%;
-                font-family: Arial, sans-serif;
-			}
-			canvas {
-				display: block;
-			}
-            #navbar {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                background-color: rgba(0, 0, 0, 0.7);
-                padding: 10px;
-                box-sizing: border-box;
-                z-index: 10;
-                display: flex;
-                justify-content: flex-end;
-            }
-            #startButton {
-                padding: 10px 20px;
-                font-size: 16px;
-                cursor: pointer;
-            }
-            #scene-container {
-                width: 100%;
-                height: 100%;
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
-		</style>
+		<link rel="stylesheet" href="css/style.css">
 		<script type="importmap">
 			{
 				"imports": {
@@ -53,11 +16,57 @@
 			}
 		</script>
 	</head>
-	<body>
-        <div id="navbar">
-            <button id="startButton">Start</button>
-        </div>
-        <div id="scene-container"></div>
+	<body class="landing-page-active">
+		<div id="content-wrapper">
+			<section id="hero">
+				<video autoplay muted loop id="hero-video" src="https://assets.mixkit.co/videos/preview/mixkit-female-archer-aims-for-the-target-34709-large.mp4"></video>
+				<div class="hero-text">
+					<h1>Le tir à l'arc en vrai !</h1>
+					<p>Découvrez le sport, la technique, le matériel.</p>
+                    <button id="startButton">Start Game</button>
+                    <div id="bow-selection-area" style="display: none;">
+                        <!-- Bow selection will be injected here by JavaScript -->
+                    </div>
+				</div>
+			</section>
+
+			<main>
+				<section id="about">
+					<h2>C'est quoi ce sport ?</h2>
+					<p>Le tir à l'arc est un sport ancien qui allie précision, concentration et force. Il peut être pratiqué comme un loisir relaxant en plein air ou comme un sport de compétition de haut niveau. Cette page vous présente les bases pour commencer.</p>
+				</section>
+
+				<section id="equipment">
+					<h2>L'équipement</h2>
+					<h3>Les Arcs</h3>
+					<div id="bows-grid" class="equipment-grid">
+						<!-- Bow cards will be dynamically generated here -->
+					</div>
+					<h3 style="margin-top: 40px;">Les Flèches</h3>
+					<div id="arrows-grid" class="equipment-grid">
+						<!-- Arrow cards will be dynamically generated here -->
+					</div>
+				</section>
+
+				<section id="rules">
+					<h2>Les règles du jeu</h2>
+					<p>Le but du jeu est de tirer des flèches au centre d'une cible. Plus vous êtes proche du centre, plus vous marquez de points. La distance de tir et le nombre de flèches par tour peuvent varier. Le jeu testera votre habileté et votre précision !</p>
+				</section>
+			</main>
+            <footer>
+                <div class="footer-content">
+                    <p>&copy; 2024 Archery Game. Tous droits réservés.</p>
+                    <div class="footer-links">
+                        <a href="#about">À propos</a>
+                        <a href="#equipment">Équipement</a>
+                        <a href="#rules">Règles</a>
+                    </div>
+                </div>
+            </footer>
+		</div>
+
+		<div id="scene-container" style="display: none;"></div>
+
 		<script type="module" src="./js/core/App.js"></script>
 	</body>
 </html>

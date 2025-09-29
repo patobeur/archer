@@ -1,5 +1,4 @@
 import { _front } from "./DomHelper.js";
-import { config } from "../config/gameConfig.js";
 
 const _uiManager = {
 	app: null,
@@ -7,77 +6,6 @@ const _uiManager = {
 
 	init: function (app) {
 		this.app = app;
-	},
-
-	enableStartButton: function () {
-		const startButton = document.getElementById("startButton");
-		if (startButton) {
-			startButton.disabled = false;
-			startButton.innerHTML = "Start";
-			startButton.addEventListener(
-				"click",
-				() => {
-					this.showBowSelection();
-				},
-				{ once: true }
-			);
-		}
-	},
-
-	showBowSelection: function () {
-		const navbar = document.getElementById("navbar");
-		if (navbar) {
-			navbar.style.display = "none";
-		}
-
-		const bowSelectionContainer = _front.createDiv({
-			attributes: { id: "bowSelection" },
-			style: {
-				position: "absolute",
-				top: "50%",
-				left: "50%",
-				transform: "translate(-50%, -50%)",
-				textAlign: "center",
-				backgroundColor: "rgba(0,0,0,0.5)",
-				padding: "20px",
-				borderRadius: "10px",
-				zIndex: "20",
-			},
-		});
-		document.body.appendChild(bowSelectionContainer);
-
-		const title = _front.createDiv({
-			tag: "h2",
-			attributes: { innerHTML: "Choose Your Bow" },
-			style: { color: "white" },
-		});
-		bowSelectionContainer.appendChild(title);
-
-		Object.keys(config.bows).forEach((bowKey) => {
-			const bow = config.bows[bowKey];
-			const bowButton = _front.createDiv({
-				tag: "button",
-				attributes: {
-					innerHTML: `${
-						bowKey.charAt(0).toUpperCase() + bowKey.slice(1)
-					} (Power: ${bow.power})`,
-				},
-				style: {
-					margin: "10px",
-					padding: "10px 20px",
-					fontSize: "16px",
-					cursor: "pointer",
-				},
-			});
-
-			bowButton.addEventListener("click", () => {
-				this.app.selectedBow = bow;
-				document.body.removeChild(bowSelectionContainer);
-				this.app.start(); // Corrected from next2() to start()
-			});
-
-			bowSelectionContainer.appendChild(bowButton);
-		});
 	},
 
 	createCrosshair: function () {
