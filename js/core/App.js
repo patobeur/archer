@@ -15,6 +15,7 @@ import { config } from '../config/gameConfig.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { _scene } from './Scene.js';
 import { LandingPage } from '../ui/LandingPage.js';
+import { InGameMenu } from '../ui/InGameMenu.js';
 
 const App = {
     gravity: new THREE.Vector3(0, -0.1, 0),
@@ -86,6 +87,7 @@ const App = {
 
         _uiManager.createCrosshair();
         _uiManager.createWarningMessage();
+        InGameMenu.init(this);
 
         _game.init(this);
         _game.start();

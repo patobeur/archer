@@ -115,10 +115,13 @@ const _arrows = {
 		if (isTouchDevice) {
 			this.createShootButton();
 		} else {
-			// Delay attaching the event listener to prevent the bow selection click from firing an arrow.
-			setTimeout(() => {
-				document.addEventListener("click", _arrows.shootArrow);
-			}, 0);
+			// For desktop, listen for clicks on the scene container to shoot.
+			const sceneContainer = document.getElementById('scene-container');
+			sceneContainer.addEventListener("click", () => {
+				if (this._scene.controls.isLocked) {
+					this.shootArrow();
+				}
+			});
 		}
 	},
 
