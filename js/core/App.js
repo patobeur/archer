@@ -14,6 +14,7 @@ import { _populateForest } from '../world/generation/ForestGenerator.js';
 import { config } from '../config/gameConfig.js';
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { _scene } from './Scene.js';
+import { LandingPage } from '../ui/LandingPage.js';
 
 const App = {
     gravity: new THREE.Vector3(0, -0.1, 0),
@@ -26,6 +27,7 @@ const App = {
     init: function () {
         console.log('[App.js] App.init() called');
         _uiManager.init(this);
+        LandingPage.init();
 
         const startButton = document.getElementById('startButton');
         if (!startButton) {

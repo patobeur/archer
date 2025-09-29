@@ -25,18 +25,9 @@ const _uiManager = {
 	},
 
 	showBowSelection: function () {
-		const navbar = document.getElementById("navbar");
-		if (navbar) {
-			navbar.style.display = "none";
-		}
-
 		const contentWrapper = document.getElementById("content-wrapper");
 		if (contentWrapper) {
 			contentWrapper.style.display = "none";
-		}
-		const footer = document.querySelector("footer");
-		if (footer) {
-			footer.style.display = "none";
 		}
 
 		const bowSelectionContainer = _front.createDiv({
