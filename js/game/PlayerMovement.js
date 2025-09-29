@@ -12,6 +12,11 @@ const _move = {
     move_touch: { id: -1, start: { x: 0, y: 0 }, vector: { x: 0, y: 0 } },
     look_touch: { id: -1, last: { x: 0, y: 0 }, vector: { x: 0, y: 0 } },
 
+    // --- Mouse Controls State ---
+    isMouseDown: false,
+    lastMouseX: 0,
+    lastMouseY: 0,
+
     // --- Joystick UI ---
     joystick_move: { base: null, handle: null },
 
@@ -51,11 +56,6 @@ const _move = {
 
     handleCameraRecenter: function() {
         if (!this.app.recenterCamera) return;
-
-        // On desktop, unlock controls if they are locked to prevent aiming.
-        if (this._scene.controls && this._scene.controls.isLocked) {
-            this._scene.controls.unlock();
-        }
 
         const euler = new THREE.Euler(0, 0, 0, 'YXZ');
         euler.setFromQuaternion(this._scene.camera.quaternion);
@@ -101,6 +101,34 @@ const _move = {
     addListeners: function () {
         document.addEventListener("keydown", (e) => (this.keys[e.key.toLowerCase()] = true));
         document.addEventListener("keyup", (e) => (this.keys[e.key.toLowerCase()] = false));
+
+        document.addEventListener('mousedown', (e) => {
+            this.isMouseDown = true;
+            this.lastMouseX = e.clientX;
+            this.lastMouseY = e.clientY;
+        });
+
+        document.addEventListener('mouseup', () => {
+            this.isMouseDown = false;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!this.isMouseDown) return;
+
+            const deltaX = e.clientX - this.lastMouseX;
+            const deltaY = e.clientY - this.lastMouseY;
+            this.lastMouseX = e.clientX;
+            this.lastMouseY = e.clientY;
+
+            const euler = new THREE.Euler(0, 0, 0, 'YXZ');
+            euler.setFromQuaternion(this._scene.camera.quaternion);
+
+            euler.y -= deltaX * this.lookSpeed;
+            euler.x -= deltaY * this.lookSpeed;
+            euler.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, euler.x));
+
+            this._scene.camera.quaternion.setFromEuler(euler);
+        });
 
         document.addEventListener("touchstart", (e) => {
             e.preventDefault();

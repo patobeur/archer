@@ -1,6 +1,4 @@
 import * as THREE from 'three';
-import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
-
 import { _soleil } from '../world/Sun.js';
 const _scene  = {
 	scene:undefined,
@@ -54,14 +52,6 @@ const _scene  = {
 		this.renderer.shadowMap.enabled = true
 
 		container.appendChild(this.renderer.domElement);
-
-		// Controls
-		const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-		if (!isTouchDevice) {
-			this.controls = new PointerLockControls(this.camera, container);
-			container.addEventListener('click', () => this.controls.lock());
-			this.scene.add(this.controls.getObject());
-		}
 
 		// Lights
 		const light = new THREE.DirectionalLight(0xffffff, 1);
