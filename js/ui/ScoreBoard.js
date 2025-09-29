@@ -1,5 +1,5 @@
-import { _front } from './front.js';
-import { _score } from './score.js';
+import { _front } from './DomHelper.js';
+import { _score } from '../game/ScoreManager.js';
 const _board = {
     gameName:undefined,width:undefined,height:undefined,
     board:undefined,scoreBoard:undefined,bestScoreBoard:undefined,

@@ -1,5 +1,5 @@
-import { _board } from './board.js';
-import { _front } from './front.js';
+import { _board } from '../ui/ScoreBoard.js';
+import { _front } from '../ui/DomHelper.js';
 
 const _score = {
 	score: new Number(0),
